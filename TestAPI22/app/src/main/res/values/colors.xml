@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="light_gray">#CD9E9E9E</color>
+
+    <color name="appointment_color_note">#B36F88FF</color>
+    <color name="medication_color_note">#B3FD5252</color>
+    <color name="positiv_color_note">#B3FFEB3B</color>
+    <color name="default_color_note">#B39E9E9E</color>
+
+    <color name="appointment_color_head">#FF6F88FF</color>
+    <color name="medication_color_head">#FFFD5252</color>
+    <color name="positiv_color_head">#FFFFEB3B</color>
+    <color name="default_color_head">#8C8C8C</color>
+
+    <color name="navigation_button_color">#FF8AFFEE</color>
+    <color name="transparent">#00000000</color>
+</resources>

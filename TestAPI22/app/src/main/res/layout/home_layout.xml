@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".Home">
+            <!-- Message si aucun pense-bête n'est renseigné -->
+    <LinearLayout
+        android:id="@+id/no_pensebete_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <TextView
+            android:id="@+id/no_pensebete_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/no_event_message"
+            android:textSize="18dp"
+            android:textColor="@color/light_gray">
+        </TextView>
+    </LinearLayout>
+            <!-- Pense-bête principal -->
+            <!-- TODO → FAIRE EN SORTE QUE ÇA S'AFFICHE DE FAÇON JOLIE SUR UNE TABLETTE COMME SUR UN TELEPHONE (gérer les marges et la taille max etc)
+                    CF https://www.youtube.com/watch?v=5lSQcJjZPFs (pour l'instant se concentrer sur la tablette, ça n'est pas censé fonctionner sur téléphone) -->
+    <LinearLayout
+        android:id="@+id/main_pensebete_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="150dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+            <!-- Titre du Pense-Bête -->
+        <TextView
+            android:id="@+id/main_pensebete_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:background="@drawable/note_header"
+            android:backgroundTint="@color/appointment_color_head"
+            android:text=""
+            android:textSize="30dp"
+            android:textColor="@color/black">
+        </TextView>
+            <!-- Corps du pense-bête -->
+        <LinearLayout
+            android:id="@+id/main_pensebete_note_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/note_text">
+                <!-- Texte du pense-bête -->
+            <TextView
+                android:id="@+id/main_pensebete_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:padding="5dp"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="25dp">
+            </TextView>
+                <!-- zone d'affichage de l'heure de l'évènement sur le pense-bête -->
+            <TextView
+                android:id="@+id/main_pensebete_heure"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:padding="5dp"
+                android:textSize="30dp"
+                android:textColor="@color/black">
+            </TextView>
+                <!-- zone d'affichage de la date de l'évènement sur le pense-bête -->
+            <TextView
+                android:id="@+id/main_pensebete_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:padding="5dp"
+                android:textSize="15dp"
+                android:textColor="@color/black">
+            </TextView>
+        </LinearLayout>
+    </LinearLayout>
+
+            <!-- Layout d'affichage du bouton flèche du bas -->
+    <LinearLayout
+        android:id="@+id/navigation_down_button_layout"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginEnd="44dp"
+        android:layout_marginBottom="47dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/heure_et_date_layout"
+        app:layout_constraintEnd_toEndOf="parent">
+        <Button
+            android:id="@+id/navigation_down_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="↓"
+            android:textSize="30dp"
+            android:background="@drawable/round_button"
+            app:backgroundTint="@color/navigation_button_color">
+        </Button>
+    </LinearLayout>
+
+            <!-- Layout d'affichage du bouton flèche du haut -->
+    <LinearLayout
+        android:id="@+id/navigation_up_button_layout"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginEnd="44dp"
+        android:layout_marginTop="47dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <Button
+            android:id="@+id/navigation_up_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="↑"
+            android:textSize="30dp"
+            android:background="@drawable/round_button"
+            app:backgroundTint="@color/navigation_button_color">
+        </Button>
+    </LinearLayout>
+
+    <!-- Layout d'affichage de l'heure et de la date actuelle -->
+    <LinearLayout
+        android:id="@+id/heure_et_date_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="5dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+            <!-- Zone d'affichage de la date actuelle -->
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="1dp"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="20dp" />
+            <!-- Zone d'affichage de l'heure actuelle -->
+        <TextView
+            android:id="@+id/hour"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="15dp"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="40dp"
+
+            />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
