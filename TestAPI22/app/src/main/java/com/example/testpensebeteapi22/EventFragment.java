@@ -26,6 +26,8 @@ import androidx.fragment.app.FragmentTransaction;
 public class EventFragment extends Fragment {
 
     //region Attributs
+
+    private float textSize;
     /** Context d'utilisation du fragment : <p> dans l'application, l'activity {@link Home} </p>*/
     private Context context;
 
@@ -63,10 +65,12 @@ public class EventFragment extends Fragment {
 
     /** Constructeur permettant d'associer le fragment avec un contexte et son évènement
      * @param context contexte du fragment :<p> L'activity {@link Home} est un contexte </p>
-     * @param event l'évènement à relier à ce fragment */
-    public EventFragment(Context context, Event event){
+     * @param event l'évènement à relier à ce fragment
+     * @param textSize multiplicateur de la taille du texte*/
+    public EventFragment(Context context, Event event, float textSize){
         this.context = context;
         this.event = event;
+        this.textSize = textSize;
     }
 
     @Nullable
@@ -150,10 +154,15 @@ public class EventFragment extends Fragment {
 
         //gestion des textes
         title.setText(event.getTitle(false));
+        title.setTextSize((float)Math.max(30,50*Math.pow(textSize, 2.5)));
         subtitle.setText(event.getSubtitle(false));
+        subtitle.setTextSize(35*textSize);
         hour_context.setText(event.getDate().hourContext());
+        hour_context.setTextSize((float) Math.max(20,35 * Math.pow(textSize, 2.5)));
         hour.setText(event.getDate().getHourFormat());
+        hour.setTextSize(60*textSize);
         informations.setText(event.getInformations());
+        informations.setTextSize(25*textSize);
 
         //gestion de l'image
         int iconId = context.getResources().getIdentifier("icone_"+ event.getIconId(), "drawable", context.getPackageName()) ;
@@ -165,7 +174,16 @@ public class EventFragment extends Fragment {
 
         //gestion des checkbox
         confirmation_check_box.setChecked(event.isConfirmed());
+        confirmation_check_box.setTextSize((float)(25*Math.pow(textSize, 1.4)));
         forgotten_check_box.setChecked(event.isForgotten());
+        forgotten_check_box.setTextSize((float)(25*Math.pow(textSize, 1.1)));
+
+        if(!event.getDate().sameDate(new Date()) && event.getDate().compareTo(new Date())>0){
+            // Si on est dans le futur, on ne peut pas cliquer sur terminé ou oublié
+            confirmation_check_box.setVisibility(View.GONE);
+            forgotten_check_box.setVisibility(View.GONE);
+        }
+
 
         //gestion de la couleur du texte en fonction de la luminance
         double luminance = event.getLuminance();

@@ -63,6 +63,11 @@ public class Home extends AppCompatActivity {
     /** @parametre : Limite des jours consultable
      * @exemple : 7 signifie qu'on peut aller jusqu'à une semaine en avance*/
     private int setting_accessibleDaysLimit;
+
+    /**
+     * @parametre : <p> permet d'adapter la taille des textes </p>
+     * @bounds : <p> de 0.5 à 2 (1 par défaut pour une tablette, 0.66 pour un téléphone)</p>*/
+    private float setting_Textsize;
     //endregion
     /** Date actuelle */
     private Date today;
@@ -111,7 +116,7 @@ public class Home extends AppCompatActivity {
     /** Compteur permettant de savoir depuis combien de temps aucune action n'a été effectuée */
     private int standby_counter;
     /** limite de temps avant la mise en veille (en secondes) */
-    private static final int STANDBY_LIMIT = 10;
+    private static final int STANDBY_LIMIT = 120;
     private boolean isInStandby;
 
 //endregion
@@ -126,6 +131,9 @@ public class Home extends AppCompatActivity {
         setting_pastIsAccessible=false;
         setting_accessibleDaysLimit=7;
         setting_hourIsVisible=true;
+
+        double screenInches = DimensionsUtil.getScreenInches(this);
+        setting_Textsize = screenInches>0 ? (float)screenInches/7 : 1;
         //endregion
 
         //region ------------ Gestion du compteur d'activité ------------
@@ -173,7 +181,7 @@ public class Home extends AppCompatActivity {
             Date date3 = new Date(date1.getDate().withHour(12).withMinute(0));
 
             this.events_list.add(new Event(1, "RDV médical", "Ophtalmologie", "APT", "111;136;255", "Docteur : Dr. Ferrezuelo,                                                                              Adresse : 21 rue du Pléssis 35700, Rennes.                                                 Note : N'oublie pas d'apporter tes lunettes !", date1, 60,10));
-            this.events_list.add(new Event(8, "Médicaments", "Desloratadine", "MDC", "253;82;82", "N'oublie pas de prendre tes médicaments c'est important :)", date2, 15, 5));
+            this.events_list.add(new Event(8, "Médicaments", "Desloratadine DesloratadineDesloratadineDesloratadineDesloratadineDesloratadineDesloratadineDesloratadineDesloratadineDesloratadineDesloratadineDesloratadineDesloratadine", "MDC", "253;82;82", "N'oublie pas de prendre tes médicaments c'est hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra  hyper mega super giga tera maxi supra  important :)", date2, 15, 5));
             this.events_list.add(new Event(2, "Médicaments", "Desloratadine", "MDC", "253;82;82", "N'oublie pas de prendre tes médicaments c'est important :)", date6, 15, 5));
 
             this.events_list.add(new Event(3, "Visite médicale", "Vaccin", "APT", "111;136;255", "L'infirmière vient chez toi aujourd'hui. Prépare ton carnet de santé", date5, 30, 12));
@@ -456,7 +464,7 @@ public class Home extends AppCompatActivity {
                         // affichage des events à confirmer en grand si on est en veille.
                         if (!day_events_to_confirm.isEmpty()) {
 
-                            EventFragment informations_fragment = new EventFragment(getApplicationContext(), day_events_to_confirm.get(0));
+                            EventFragment informations_fragment = new EventFragment(getApplicationContext(), day_events_to_confirm.get(0), setting_Textsize);
 
                             if(isInStandby){
                                 runOnUiThread(new Runnable() {
@@ -580,7 +588,7 @@ public class Home extends AppCompatActivity {
             TextView title = new TextView(this);
             title.setId(View.generateViewId());
             title.setText(e.getTitle(true));
-            title.setTextSize(30);
+            title.setTextSize(30*setting_Textsize);
             title.setTypeface(null, Typeface.BOLD);
             title.setTextColor(Color.BLACK);
             title.setPadding(20, 5, 20, 5);
@@ -590,7 +598,7 @@ public class Home extends AppCompatActivity {
             TextView subtitle = new TextView(this);
             subtitle.setId(View.generateViewId());
             subtitle.setText(e.getSubtitle(true));
-            subtitle.setTextSize(20);
+            subtitle.setTextSize(20*setting_Textsize);
             subtitle.setTextColor(Color.BLACK);
             subtitle.setPadding(20, 5, 20, 5);
             //endregion
@@ -603,7 +611,7 @@ public class Home extends AppCompatActivity {
             TextView hourEvent = new TextView(this);
             hourEvent.setId(View.generateViewId());
             hourEvent.setText(e.getDate().getHourFormat());
-            hourEvent.setTextSize(30);
+            hourEvent.setTextSize(30*setting_Textsize);
             hourEvent.setTypeface(null, Typeface.BOLD);
             hourEvent.setPadding(20,5,20,5);
             hourEvent.setTextColor(Color.BLACK);
@@ -692,7 +700,7 @@ public class Home extends AppCompatActivity {
                         isInStandby = false;
 
                         //gestion du fragment à ajouter
-                        EventFragment informations_fragment = new EventFragment(getApplicationContext(), e);
+                        EventFragment informations_fragment = new EventFragment(getApplicationContext(), e, setting_Textsize);
 
                         findViewById(R.id.fragment_container).setVisibility(View.VISIBLE);
 
@@ -727,6 +735,7 @@ public class Home extends AppCompatActivity {
             banner_layout.getBackground().setTint(day_banner.getRGBColor());
 
             banner_text.setText(day_banner.getDescription(true));
+            banner_text.setTextSize(30*setting_Textsize);
             int iconId = getResources().getIdentifier("icone_"+day_banner.getIconId(), "drawable", getPackageName());
             banner_image.setImageDrawable(getDrawable(iconId));
 

@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Pense Bête</string>
-    <string name="no_event_message">Aucun évènement prévu pour aujourd\'hui</string>
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string> <!-- message à afficher si la liste de post-it est vide -->
+    <string name="no_event_message">Aucun évènement prévu pour aujourd\'hui</string> <!-- message à afficher si la liste de post-it est vide -->
+    <string name="navigation_right_description">navigation vers le jour suivant</string>
+    <string name="navigation_left_description">navigation vers le jour précédent</string>
+    <string name="confirmation">Terminé</string>
+    <string name="forgotten">Oublié</string>
 </resources>

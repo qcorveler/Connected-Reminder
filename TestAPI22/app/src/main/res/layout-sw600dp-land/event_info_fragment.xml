@@ -78,33 +78,53 @@
         app:layout_constraintStart_toStartOf="@id/start_info_guideline"
         app:layout_constraintTop_toTopOf="@id/top_info_guideline">
 
-        <TextView
-            android:id="@+id/event_info_subtitle"
+        <HorizontalScrollView
+            android:id="@+id/subtitle_scrollview"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Sous-titre"
-            android:textColor="@color/black"
-            android:textSize="35dp"
-            android:textStyle="bold"
+            android:orientation="horizontal"
 
             app:layout_constraintStart_toStartOf="@id/event_info_layout_start_guideline"
             app:layout_constraintTop_toTopOf="@id/event_info_layout_top_subtitle_guideline"
             app:layout_constraintEnd_toEndOf="@id/event_info_layout_end_guideline"
-            app:layout_constraintHorizontal_bias="0"></TextView>
+            app:layout_constraintHorizontal_bias="0">
+            <TextView
+                android:id="@+id/event_info_subtitle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Sous-titre"
+                android:textColor="@color/black"
+                android:textSize="35dp"
+                android:textStyle="bold"
 
-        <TextView
-            android:id="@+id/event_info_informations"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="informations supplémentaires à afficher"
-            android:textColor="@color/black"
-            android:textSize="25dp"
+                ></TextView>
+        </HorizontalScrollView>
 
-            android:layout_marginTop="20dp"
+        <ScrollView
+            android:id="@+id/information_scrollview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+
             app:layout_constraintEnd_toEndOf="@id/event_info_layout_end_guideline"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/event_info_layout_start_guideline"
-            app:layout_constraintTop_toBottomOf="@id/event_info_subtitle"></TextView>
+            app:layout_constraintTop_toBottomOf="@id/subtitle_scrollview"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                android:id="@+id/event_info_informations"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="informations supplémentaires à afficher"
+                android:textColor="@color/black"
+                android:textSize="25dp"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:paddingBottom="50dp"
+
+                android:layout_marginTop="20dp"></TextView>
+        </ScrollView>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/event_info_layout_top_subtitle_guideline"
@@ -143,8 +163,8 @@
         <CheckBox
             android:id="@+id/event_confirmation_checkbox"
             android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:text="Terminé"
+            android:layout_height="wrap_content"
+            android:text="@string/confirmation"
             android:textSize="30dp"
             android:textColor="@color/black"
             android:paddingStart="10dp">
@@ -153,8 +173,8 @@
         <CheckBox
             android:id="@+id/forgotten_event_checkbox"
             android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:text="Oublié"
+            android:layout_height="wrap_content"
+            android:text="@string/forgotten"
             android:textSize="30dp"
             android:textColor="@color/black"
             android:paddingStart="10dp">
