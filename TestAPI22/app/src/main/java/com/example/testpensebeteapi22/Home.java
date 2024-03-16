@@ -148,7 +148,7 @@ public class Home extends AppCompatActivity {
         today = new Date();
         display_date = new Date();
 
-        text_view_display_day =findViewById(R.id.date); // récupération des TextView qui contiennent la date et l'heure pour l'affichage
+        text_view_display_day = findViewById(R.id.date); // récupération des TextView qui contiennent la date et l'heure pour l'affichage
         text_view_display_hour = findViewById(R.id.hour);
         text_view_display_temporality = findViewById(R.id.temporality);
 
@@ -563,7 +563,7 @@ public class Home extends AppCompatActivity {
         }else{
             findViewById(R.id.no_pensebete_layout).setVisibility(View.GONE);
         }
-        
+
         // Affichage des events de la liste de jour
         for (Event e: day_events){
             // Création du layout enfant à ajouter et définition des attributs
@@ -571,7 +571,6 @@ public class Home extends AppCompatActivity {
             child.setId(View.generateViewId());
             child.setBackground(getDrawable(R.drawable.event_shape)); // Récupération de la forme
             child.getBackground().setTint(e.getRGBColor(false)); // Récupération de la couleur de l'évènement
-
             // Création du LayoutParams pour les paramètres du Layout child
             LinearLayout.LayoutParams childLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             childLayoutParams.setMargins(0, 20, 0, 20);

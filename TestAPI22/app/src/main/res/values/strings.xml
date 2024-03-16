@@ -5,4 +5,7 @@
     <string name="navigation_left_description">navigation vers le jour précédent</string>
     <string name="confirmation">Terminé</string>
     <string name="forgotten">Oublié</string>
+
+    <string name="back"><![CDATA[<-]]></string>
+    <string name="forward"><![CDATA[->]]></string>
 </resources>

@@ -118,7 +118,7 @@ public class Date {
     /** Cette méthode utilise la méthode {@link Date#dayDifference(Date)} et considère qu'un mois est constitué de 30 jours
      * @param other l'autre date à comparer (non null)
      * @return le nombre de mois de différence entre 2 dates : <p> Positif si <code> this.{@link Date#compareTo}(other) </code> > 0,</p> <p>négatif sinon</p> */
-    private int monthDifference(Date other){return this.dayDifference(other)/30;}
+    int monthDifference(Date other){return this.dayDifference(other)/30;}
 
     /** Cette méthode utilise la méthode {@link Date#dayDifference(Date)} et considère qu'un an est constitué de 365 jours
      * @param other l'autre date à comparer (non null)
@@ -213,6 +213,17 @@ public class Date {
     /** retire 1 jour à la date this 
      * @utilise {@link LocalDateTime#minusDays}*/
     public void previousDay() { this.date = this.date.minusDays(1); }
+
+    /** ajoute 1 mois à la date this **/
+    public void nextMonth(){
+        date = date.plusMonths(1);
+    }
+
+    /** retire 1 mois à la date this **/
+    public void previousMonth(){
+        date = date.minusMonths(1);
+    }
+
 
     /** permet de savoir si la date d'appel est dans moins de minutes que la valeur passée en paramètre
      * @param minutes temps en minutes à tester
