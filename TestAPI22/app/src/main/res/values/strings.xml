@@ -18,4 +18,11 @@
     <string name="add_duration_input"><b>Durée</b></string>
     <string name="add_color_input"><b>Couleur</b></string>
 
+    <string-array name="police_size">
+        <item> Police : Grande </item>
+        <item> Police : Moyenne </item>
+        <item> Police : Petite </item>
+
+    </string-array>
+
 </resources>
