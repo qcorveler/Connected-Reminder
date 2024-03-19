@@ -32,6 +32,10 @@ public class Event extends InformationElement implements Comparable<Event>{
     private boolean confirmed;
     /** Attribut permettant de savoir si l'évènement a été oublié par l'utilisateur */
     private boolean forgotten;
+    /** Attribut permettant de savoir si un évènement est récurrent où non*/
+    private boolean recurrent;
+
+
     /** Limite en nombre de caractère au dessus de laquelle on considère qu'il faut crop le titre (et ajouter '...') */
     private static final int TITLE_CROP_LIMIT = 30;
     /** Limite en nombre de caractère au dessus de laquelle on considère qu'il faut crop le sous-titre (et ajouter '...')*/
