@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ABC">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choisissez votre mode"
+        android:textColor="@color/black"
+        android:textSize="35sp"
+        app:flow_horizontalAlign="center"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="33dp"
+        tools:layout_editor_absoluteY="152dp"
+        android:layout_marginTop="120dp"
+        android:layout_marginLeft="20dp"/>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="153dp"
+        android:layout_height="186dp"
+        app:srcCompat="@drawable/personne__agee"
+        tools:layout_editor_absoluteX="33dp"
+        tools:layout_editor_absoluteY="272dp"
+        android:layout_marginLeft="-335dp"
+        android:layout_marginTop="225dp"/>
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="180dp"
+        android:layout_height="162dp"
+        app:srcCompat="@drawable/personne_jeune"
+        tools:layout_editor_absoluteX="33dp"
+        tools:layout_editor_absoluteY="272dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="235dp"/>
+
+    <Button
+        android:id="@+id/helped_button"
+        android:layout_width="102dp"
+        android:layout_height="65dp"
+        android:text="Helped"
+
+        tools:layout_editor_absoluteX="65dp"
+        tools:layout_editor_absoluteY="471dp"
+        android:layout_marginLeft="-305dp"
+        android:layout_marginTop="400dp"/>
+
+
+    <Button
+        android:id="@+id/helper_button"
+        android:layout_width="102dp"
+        android:layout_height="65dp"
+        android:text="Helper"
+        tools:layout_editor_absoluteX="260dp"
+        tools:layout_editor_absoluteY="471dp"
+        android:layout_marginTop="400dp"
+        android:layout_marginLeft="60dp"/>
+
+</LinearLayout>
+

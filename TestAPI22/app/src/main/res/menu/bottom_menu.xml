@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/navigaton_home"
+        android:title="Acceuil"
+        android:icon="@drawable/navigation_home" />
+    <item android:id="@+id/navigaton_parameters"
+        android:title="Paramètres"
+        android:icon="@drawable/parametres" />
+    <item android:id="@+id/navigation_add"
+        android:title="Ajouter"
+        android:icon="@drawable/navigation_add" />
+</menu>
