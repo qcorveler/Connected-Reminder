@@ -1,12 +1,10 @@
 package com.example.testpensebeteapi22;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CalendarView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
