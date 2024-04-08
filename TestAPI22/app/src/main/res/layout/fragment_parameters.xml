@@ -28,7 +28,8 @@
         android:textSize="@dimen/activity_vertical_margin"
 
         app:layout_constraintStart_toStartOf="@id/guideline_marge_2"
-        app:layout_constraintTop_toTopOf="@id/guideline_marge_4"/>
+        app:layout_constraintTop_toTopOf="@id/guideline_marge_4"
+        android:checked="true"/>
 
     <Switch
         android:id="@+id/standbymode"
@@ -40,7 +41,8 @@
         android:textSize="@dimen/activity_vertical_margin"
 
         app:layout_constraintStart_toStartOf="@id/guideline_marge_2"
-        app:layout_constraintTop_toTopOf="@id/guideline_marge_5"/>
+        app:layout_constraintTop_toTopOf="@id/guideline_marge_5"
+        android:checked="true"/>
 
     <Switch
         android:id="@+id/pastaccessible"
@@ -52,7 +54,8 @@
         android:textSize="@dimen/activity_vertical_margin"
 
         app:layout_constraintStart_toStartOf="@id/guideline_marge_2"
-        app:layout_constraintTop_toTopOf="@id/guideline_marge_6"/>
+        app:layout_constraintTop_toTopOf="@id/guideline_marge_6"
+        />
     <Switch
         android:id="@+id/hourvisible"
         android:layout_width="180dp"
@@ -63,7 +66,8 @@
         android:textSize="@dimen/activity_vertical_margin"
 
         app:layout_constraintStart_toStartOf="@id/guideline_marge_2"
-        app:layout_constraintTop_toTopOf="@id/guideline_marge_7"/>
+        app:layout_constraintTop_toTopOf="@id/guideline_marge_7"
+        android:checked="true"/>
     <Switch
         android:id="@+id/sounds"
         android:layout_width="100dp"
@@ -74,7 +78,8 @@
         android:textSize="@dimen/activity_vertical_margin"
 
         app:layout_constraintStart_toStartOf="@id/guideline_marge_9"
-        app:layout_constraintTop_toTopOf="@id/guideline_marge_4"/>
+        app:layout_constraintTop_toTopOf="@id/guideline_marge_4"
+        android:checked="true"/>
 
     <Spinner
         android:id="@+id/police"
