@@ -16,7 +16,6 @@
         android:scaleType="fitCenter"
         android:src="@drawable/icone_1"
         app:layout_constraintDimensionRatio="1"
-
         app:layout_constraintBottom_toBottomOf="@id/bottom_title_guideline"
         app:layout_constraintTop_toTopOf="@id/top_title_guideline"
         app:layout_constraintStart_toStartOf="@id/start_info_guideline">
@@ -28,7 +27,6 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="15dp"
         android:orientation="vertical"
-
         app:layout_constraintStart_toStartOf="@id/start_title_guideline"
         app:layout_constraintTop_toTopOf="@id/top_title_guideline"
         app:layout_constraintBottom_toBottomOf="@id/bottom_title_guideline"

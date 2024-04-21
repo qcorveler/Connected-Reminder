@@ -3,7 +3,6 @@ package com.example.testpensebeteapi22;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +27,7 @@ public class EventFragment extends Fragment {
     //region Attributs
 
     private float textSize;
-    /** Context d'utilisation du fragment : <p> dans l'application, l'activity {@link Home} </p>*/
+    /** Context d'utilisation du fragment : <p> dans l'application, l'activity {@link HelpedActivity} </p>*/
     private Context context;
 
     /** Évènement relié au fragment */
@@ -64,7 +63,7 @@ public class EventFragment extends Fragment {
     //endregion
 
     /** Constructeur permettant d'associer le fragment avec un contexte et son évènement
-     * @param context contexte du fragment :<p> L'activity {@link Home} est un contexte </p>
+     * @param context contexte du fragment :<p> L'activity {@link HelpedActivity} est un contexte </p>
      * @param event l'évènement à relier à ce fragment
      * @param textSize multiplicateur de la taille du texte*/
     public EventFragment(Context context, Event event, float textSize){
@@ -119,8 +118,8 @@ public class EventFragment extends Fragment {
             public void onClick(View v) {
 
                 Context activity = getActivity();
-                if (activity instanceof Home) {
-                    Home home = (Home) activity;
+                if (activity instanceof HelpedActivity) {
+                    HelpedActivity home = (HelpedActivity) activity;
                     home.setInStandby(false);
 
                     Thread backgroundThread = home.getBackgroundPastEvents();

@@ -65,6 +65,9 @@ public class Event extends InformationElement implements Comparable<Event>{
         confirmed = false;
         this.iconId = iconId;
     }
+    public Event() {
+        // Constructeur vide requis par Firebase
+    }
 
     /** Teste si 2 évènements sont identiques. On considère que 2 évènements sont identiques si leur ID est égal
      * @param other l'autre Event à comparer
@@ -93,6 +96,10 @@ public class Event extends InformationElement implements Comparable<Event>{
 
         return cropTitle;
     }
+
+    public String getTitle(){
+        return title;
+    }
     public void setTitle(String title) {this.title = title;}
 
 
@@ -114,6 +121,10 @@ public class Event extends InformationElement implements Comparable<Event>{
         String cropSubtitle = crop && subtitle.length()>maxLength ? subtitle.substring(0, maxLength) + "..." : subtitle;
 
         return cropSubtitle;
+    }
+
+    public String getSubtitle(){
+        return subtitle;
     }
     public void setSubtitle(String subtitle){this.subtitle = subtitle;}
 

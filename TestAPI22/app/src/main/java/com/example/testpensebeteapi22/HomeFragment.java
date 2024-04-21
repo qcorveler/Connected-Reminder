@@ -2,23 +2,16 @@ package com.example.testpensebeteapi22;
 
 
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
-import android.widget.ImageButton;
 import android.widget.Toast;
-
-import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
 
@@ -26,7 +19,7 @@ public class HomeFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.calendar,container, false);
+        View rootView = inflater.inflate(R.layout.helperfragment,container, false);
         //super.onCreate(savedInstanceState);
         simpleCalendarView = (CalendarView) rootView.findViewById(R.id.simpleCalendarView); // get the reference of CalendarView
         simpleCalendarView.setUnfocusedMonthDateColor(Color.BLUE); // set the yellow color for the dates of an unfocused month

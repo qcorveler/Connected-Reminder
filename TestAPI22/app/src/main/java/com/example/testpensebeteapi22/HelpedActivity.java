@@ -48,7 +48,7 @@ import java.util.Collections;
  * @author Méline, Pauline, Jérémy et Quentin
  * @version 1.7.1 <i>prototype</i>
  * */
-public class Home extends AppCompatActivity {
+public class HelpedActivity extends AppCompatActivity {
 
     //region Attributs
 

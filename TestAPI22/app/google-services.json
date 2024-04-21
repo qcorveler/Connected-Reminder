@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "707267002224",
+    "project_id": "pense-bete-9293d",
+    "storage_bucket": "pense-bete-9293d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:707267002224:android:51b2a7eedb4613544759b5",
+        "android_client_info": {
+          "package_name": "com.example.testpensebeteapi22"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMYfDz--UG_R44ZHvkxcpw-38m07UJ_2E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

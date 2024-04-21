@@ -2,6 +2,7 @@ package com.example.testpensebeteapi22;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,12 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 public class AddFragment extends Fragment {
     EditText title;
     EditText subtitle;
@@ -20,10 +27,10 @@ public class AddFragment extends Fragment {
     Button add;
     OnEventReturnedListener eventReturnedListener;
 
-
+    // Fragment permettant d'ajouter un pense bête à la base de données
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.add_reminder,container, false);
+        View rootView = inflater.inflate(R.layout.addfragment,container, false);
 
         title = rootView.findViewById(R.id.title);
         subtitle = rootView.findViewById(R.id.subtitle);
@@ -33,17 +40,34 @@ public class AddFragment extends Fragment {
         add.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Event e = new Event(0, title.getText().toString(),subtitle.getText().toString(),"MED", "#DEF", informations.getText().toString(), new Date(), 50,10 );
+                FirebaseDatabase database = FirebaseDatabase.getInstance("https://pense-bete-9293d-default-rtdb.europe-west1.firebasedatabase.app");
+                DatabaseReference myRef = database.getReference("events");
+                Event e = new Event(0, title.getText().toString(),subtitle.getText().toString(),"MED", "111;136;255", informations.getText().toString(), null, 50,10 );
                 if(eventReturnedListener != null) {
-                    // Envoyez l'event à l'activité
                     //TODO Gestion des entrées pour la création d'un event (date, couleur, icon...)
-                    returnEventToActivity(e);
                     Toast.makeText(rootView.getContext(), "Pense-Bête ajouté avec succès !", Toast.LENGTH_LONG).show();
 
                 }
+                myRef.setValue(e);
                 title.setText("");
                 subtitle.setText("");
                 informations.setText("");
+
+                myRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        //Pour ajouter l'event
+                        Event value = dataSnapshot.getValue(Event.class);
+                        Log.d("Pense-Bête error", "Value is: " + value);
+                        System.out.println("Event ajouté !");
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // Erreur lors de l'ajout à la base de données
+                        Log.w("Erreur lors de l'ajout" ,"Failed to read value.", error.toException());
+                    }
+                });
             }
         });
         return rootView;
@@ -58,6 +82,8 @@ public class AddFragment extends Fragment {
             throw new RuntimeException(context.toString() + " must implement OnEventReturnedListener");
         }
     }
+
+    // Je pense qu'on pourra supprimer les 3 méthodes suivantes mais je les garde au cas où
     public interface OnEventReturnedListener{
         void onEventReturned(Event e);
     }
