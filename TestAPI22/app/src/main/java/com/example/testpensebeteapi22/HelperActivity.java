@@ -14,6 +14,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 
+//HelperActivity est l'activité principale du Helper avec la barre de navigation sur laquelle on rajoute un fragment
 public class HelperActivity extends AppCompatActivity implements AddFragment.OnEventReturnedListener {
     private BottomNavigationView bottomNavigationView;
     private FrameLayout frameLayout;
@@ -28,7 +29,6 @@ public class HelperActivity extends AppCompatActivity implements AddFragment.OnE
 
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
         frameLayout = findViewById(R.id.frameLayout);
-
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menu){
@@ -36,7 +36,7 @@ public class HelperActivity extends AppCompatActivity implements AddFragment.OnE
                 int itemId = menu.getItemId();
 
                 if(itemId == R.id.navigaton_home){
-                    loadFragment(new HomeFragment(),false);
+                    loadFragment(new CalendarFragment(),false);
                 }
                 else if(itemId == R.id.navigaton_parameters){
                     loadFragment(new ParametersFragment(),false);
@@ -49,7 +49,7 @@ public class HelperActivity extends AppCompatActivity implements AddFragment.OnE
                 return true;
             }
         });
-        loadFragment(new HomeFragment(),true);
+        loadFragment(new CalendarFragment(),true);
     }
     public void loadFragment(Fragment fragment, boolean isAppInitialized){
 
@@ -68,6 +68,8 @@ public class HelperActivity extends AppCompatActivity implements AddFragment.OnE
     public ArrayList<Event> getEvenements(){
         return evenements;
     }
+
+    // De même, on pourra surement retirer la méthode suivante et son appel
     @Override
     public void onEventReturned(Event e){
         evenements.add(e);
