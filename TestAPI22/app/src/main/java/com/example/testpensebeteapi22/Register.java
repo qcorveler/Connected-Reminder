@@ -24,6 +24,7 @@ import org.w3c.dom.Text;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Random;
 
@@ -89,6 +90,10 @@ public class Register extends AppCompatActivity {
                     database.child(path).child(idTxt).child("name").setValue(nameTxt);
                     database.child(path).child(idTxt).child("email").setValue(emailTxt);
                     database.child(path).child(idTxt).child("password").setValue(passwordTxt);
+                    if(mode.equals("1")){
+                        database.child(path).child(idTxt).child("list").setValue(new ArrayList<>());
+                    }
+
                     Toast.makeText(Register.this, "Utilisateur inscrit", Toast.LENGTH_SHORT).show();
                     finish();
                 }

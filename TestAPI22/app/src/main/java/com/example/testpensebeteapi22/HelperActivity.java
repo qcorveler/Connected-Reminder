@@ -8,7 +8,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.Spinner;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -19,6 +21,7 @@ public class HelperActivity extends AppCompatActivity implements AddFragment.OnE
     private BottomNavigationView bottomNavigationView;
     private FrameLayout frameLayout;
     public ArrayList<Event> evenements;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -50,6 +53,8 @@ public class HelperActivity extends AppCompatActivity implements AddFragment.OnE
             }
         });
         loadFragment(new CalendarFragment(),true);
+
+
     }
     public void loadFragment(Fragment fragment, boolean isAppInitialized){
 

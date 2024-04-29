@@ -9,6 +9,7 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/helper_fragment_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Planning de Papa"
@@ -66,28 +67,52 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.2" />
+        app:layout_constraintGuide_percent="0.15" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_marge_5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.7" />
+        app:layout_constraintGuide_percent="0.66" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_marge_6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.78" />
+        app:layout_constraintGuide_percent="0.74" />
 
-    <Button
-        android:id="@+id/back"
+    <Spinner
+        android:id="@+id/spinner_helped"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Menu Principal"
         app:layout_constraintTop_toTopOf="@id/guideline_marge_5"
         app:layout_constraintStart_toStartOf="@id/guideline_marge_1"
         app:layout_constraintEnd_toEndOf="@id/guideline_marge_2"/>
+
+    <Button
+        android:id="@+id/add_new_helped"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/round_button"
+        android:text="+"
+        app:layout_constraintTop_toBottomOf="@id/email_edit_text"
+        app:layout_constraintEnd_toEndOf="@id/guideline_marge_2" />
+
+    <EditText
+        android:id="@+id/email_edit_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Entrez l'email de la personne à ajouter"
+        android:textColorHint="@color/black"
+        app:layout_constraintTop_toTopOf="@id/guideline_marge_6"
+        app:layout_constraintStart_toStartOf="@id/guideline_marge_1"
+        app:layout_constraintEnd_toEndOf="@id/guideline_marge_2"
+        />
+
+
     <!-- <ImageButton
         android:id="@+id/parameters"
         android:background="@color/gray"
