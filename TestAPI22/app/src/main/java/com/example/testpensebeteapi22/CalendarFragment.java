@@ -25,6 +25,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
@@ -66,6 +67,7 @@ public class CalendarFragment extends Fragment {
         new_helped.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                System.out.println("Cliqué");
                 database.child("aidés").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -73,8 +75,10 @@ public class CalendarFragment extends Fragment {
                         for (DataSnapshot childSnapshot : snapshot.getChildren()) {
                             String id = childSnapshot.getKey();
                             String getEmail = snapshot.child(id).child("email").getValue(String.class);
-                            if (getEmail.equals(email.getText())) {
+                            System.out.println(getEmail);
+                            if (getEmail.equals(email.getText().toString())) {
                                 String id_helper = readConfig();
+                                System.out.println("Trouvé");
                                 database.child("aidants").child(id_helper).addListenerForSingleValueEvent(new ValueEventListener() {
 
                                     @Override
@@ -82,12 +86,17 @@ public class CalendarFragment extends Fragment {
                                         List l = new ArrayList();
                                         if (snapshot.exists()) {
                                             // Si la liste existe déjà, récupérez-la d'abord
-                                            l = snapshot.child("list").getValue(List.class);
+                                            l = snapshot.child("list").getValue(new GenericTypeIndicator<List<String>>() {});
+                                            if(l == null){
+                                                l = new ArrayList<>();
+                                            }
                                         }
                                         l.add(id);
-
                                         database.child("aidants").child(id_helper).child("list").setValue(l);
+                                        Toast.makeText(rootView.getContext(), "Liste modifiée", Toast.LENGTH_LONG).show();
+
                                     }
+
 
                                     @Override
                                     public void onCancelled(@NonNull DatabaseError error) {
@@ -95,6 +104,7 @@ public class CalendarFragment extends Fragment {
                                     }
                                 });
                             }
+                            email.setText("");
                         }
                     }
 
