@@ -113,6 +113,9 @@ public class HelpedActivity extends AppCompatActivity {
     /** Bouton de navigation des pense-bêtes vers la gauche (le passé) */
     private ImageButton navigation_left_button;
 
+    /** Bouton d'affichage des paramètres */
+    private ImageButton parameters_button;
+
     /** Compteur permettant de savoir depuis combien de temps aucune action n'a été effectuée */
     private int standby_counter;
     /** limite de temps avant la mise en veille (en secondes) */
@@ -276,6 +279,13 @@ public class HelpedActivity extends AppCompatActivity {
             }
         });
 
+        this.parameters_button = findViewById(R.id.parameters_button);
+        this.parameters_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO afficher un pop_up de retour vers le menu principal
+            }
+        });
         displayButtons();
 
         //gestion de l'appui sur le bouton retour :
@@ -697,6 +707,7 @@ public class HelpedActivity extends AppCompatActivity {
                         //gestion de la veille
                         standby_counter = 0;
                         isInStandby = false;
+                        parameters_button.setVisibility(View.GONE);
 
                         //gestion du fragment à ajouter
                         EventFragment informations_fragment = new EventFragment(getApplicationContext(), e, setting_Textsize);
@@ -779,6 +790,10 @@ public class HelpedActivity extends AppCompatActivity {
         if(!stanby){
             this.standby_counter=0;
         }
+    }
+
+    public void setVisible_ParametersButton(){
+        parameters_button.setVisibility(View.VISIBLE);
     }
 
     public Thread getBackgroundPastEvents(){return this.backgroundPastEvents;}

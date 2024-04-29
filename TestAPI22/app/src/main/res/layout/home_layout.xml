@@ -258,6 +258,19 @@
 
     </FrameLayout>
 
+    <ImageButton
+        android:id="@+id/parameters_button"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/parametres"
+        android:scaleType="fitCenter"
+        android:backgroundTint="@color/transparent"
+
+        app:layout_constraintStart_toStartOf="@id/guideline_marge_1"
+        app:layout_constraintBottom_toBottomOf="@id/guideline_list_of_event_bottom"
+        app:layout_constraintEnd_toEndOf="@id/guideline_marge_3"
+        app:layout_constraintTop_toTopOf="@id/guideline_top_of_parameters"/>
+
     <!-- Guidelines -->
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_date_top"
@@ -286,6 +299,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.95" /> <!-- list_of_event_bottom -->
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_top_of_parameters"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.85" /> <!-- top_of_parameters -->
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_marge_1"

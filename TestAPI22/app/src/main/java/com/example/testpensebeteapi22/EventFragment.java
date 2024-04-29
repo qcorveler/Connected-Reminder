@@ -137,6 +137,7 @@ public class EventFragment extends Fragment {
                     transaction.commit();
 
                     home.displayDayEvents();
+                    home.setVisible_ParametersButton();
                 }
             }
 
