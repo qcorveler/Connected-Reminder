@@ -52,7 +52,9 @@ public class Login extends AppCompatActivity {
                                 if(getEmail.equals(emailTxt) && getPwd.equals(passwordTxt)){
                                     Toast.makeText(Login.this, "Connexion réussie", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(Login.this, MainMenuActivity.class);
-                                    intent.putExtra("idConnexion",id);
+                                    int idTransmis = Integer.parseInt(id);
+                                    intent.putExtra("idConnexion",idTransmis);
+                                    startActivity(intent);
                                     finish();
                                     break;
                                 }

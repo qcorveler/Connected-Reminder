@@ -43,6 +43,11 @@ public class MainMenuActivity extends AppCompatActivity {
         });
     }
 
+
+    public int getIdConnexion() {
+        return idConnexion;
+    }
+
     public void setIdConnexion(int idConnexion) {
         this.idConnexion = idConnexion;
     }
