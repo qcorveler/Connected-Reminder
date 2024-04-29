@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <TextView
         android:layout_width="match_parent"
@@ -11,76 +12,160 @@
         android:textAlignment="center"
         android:textSize="50dp"
         android:textColor="@color/black"
-        android:layout_marginTop="20dp"
-    />
+
+        app:layout_constraintStart_toStartOf="@id/guideline_marge_2"
+        app:layout_constraintEnd_toEndOf="@id/guideline_marge_3"
+        app:layout_constraintTop_toTopOf="@id/guideline_marge_1"
+        />
 
     <Switch
         android:id="@+id/notifications"
         android:layout_width="150dp"
-        android:layout_marginTop="100dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:text="Notifications "
         android:textColor="@color/black"
-        android:textSize="@dimen/activity_vertical_margin"/>
+        android:textSize="@dimen/activity_vertical_margin"
+
+        app:layout_constraintStart_toStartOf="@id/guideline_marge_2"
+        app:layout_constraintTop_toTopOf="@id/guideline_marge_4"
+        android:checked="true"/>
 
     <Switch
         android:id="@+id/standbymode"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
         android:layout_marginLeft="20dp"
         android:text="Standby Mode "
         android:textColor="@color/black"
-        android:textSize="@dimen/activity_vertical_margin"/>
+        android:textSize="@dimen/activity_vertical_margin"
+
+        app:layout_constraintStart_toStartOf="@id/guideline_marge_2"
+        app:layout_constraintTop_toTopOf="@id/guideline_marge_5"
+        android:checked="true"/>
 
     <Switch
         android:id="@+id/pastaccessible"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
         android:layout_marginLeft="20dp"
         android:text="Consulter précédents "
         android:textColor="@color/black"
-        android:textSize="@dimen/activity_vertical_margin"/>
+        android:textSize="@dimen/activity_vertical_margin"
+
+        app:layout_constraintStart_toStartOf="@id/guideline_marge_2"
+        app:layout_constraintTop_toTopOf="@id/guideline_marge_6"
+        />
     <Switch
         android:id="@+id/hourvisible"
         android:layout_width="180dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
         android:layout_marginLeft="20dp"
         android:text="Visibilité de l'heure "
         android:textColor="@color/black"
-        android:textSize="@dimen/activity_vertical_margin"/>
+        android:textSize="@dimen/activity_vertical_margin"
+
+        app:layout_constraintStart_toStartOf="@id/guideline_marge_2"
+        app:layout_constraintTop_toTopOf="@id/guideline_marge_7"
+        android:checked="true"/>
     <Switch
         android:id="@+id/sounds"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-260dp"
-        android:layout_marginLeft="240dp"
+        android:layout_marginLeft="20dp"
         android:text="Son"
         android:textColor="@color/black"
-        android:textSize="@dimen/activity_vertical_margin"/>
+        android:textSize="@dimen/activity_vertical_margin"
+
+        app:layout_constraintStart_toStartOf="@id/guideline_marge_9"
+        app:layout_constraintTop_toTopOf="@id/guideline_marge_4"
+        android:checked="true"/>
 
     <Spinner
         android:id="@+id/police"
         android:layout_width="150dp"
         android:layout_height="40dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginLeft="220dp"
+        android:layout_marginLeft="20dp"
         android:entries="@array/police_size"
 
+        app:layout_constraintStart_toStartOf="@id/guideline_marge_9"
+        app:layout_constraintTop_toTopOf="@id/guideline_marge_5"
         />
 
     <Button
         android:id="@+id/add"
         android:layout_width="200dp"
         android:layout_height="75dp"
-        android:layout_marginLeft="110dp"
-        android:layout_marginTop="250dp"
         android:background="@color/cardview_dark_background"
         android:text="Sauvegarder"
-        android:textSize="24dp"/>
+        android:textSize="24dp"
+
+        app:layout_constraintStart_toStartOf="@id/guideline_marge_2"
+        app:layout_constraintTop_toTopOf="@id/guideline_marge_8"
+        app:layout_constraintEnd_toEndOf="@id/guideline_marge_3"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_marge_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_marge_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_marge_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_marge_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.25" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_marge_5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.40" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_marge_6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.55" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_marge_7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.70" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_marge_8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.80" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_marge_9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.55" />
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

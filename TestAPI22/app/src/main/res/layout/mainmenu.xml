@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ABC">
+    android:background="#ABE">
 
 
     <TextView
@@ -18,21 +18,23 @@
         app:layout_constraintEnd_toEndOf="@id/guideline_marge_2"/>
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/old_image"
         android:layout_width="153dp"
         android:layout_height="186dp"
         app:srcCompat="@drawable/personne__agee"
         app:layout_constraintTop_toTopOf="@id/guideline_marge_4"
-        app:layout_constraintStart_toStartOf="@id/guideline_marge_7"/>
+        app:layout_constraintStart_toStartOf="@id/guideline_marge_7"
+        app:layout_constraintEnd_toStartOf="@id/young_image"/>
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/young_image"
         android:layout_width="180dp"
         android:layout_height="162dp"
         android:paddingTop="20dp"
         app:srcCompat="@drawable/personne_jeune"
         app:layout_constraintTop_toTopOf="@id/guideline_marge_4"
-        app:layout_constraintEnd_toEndOf="@id/guideline_marge_8"/>
+        app:layout_constraintEnd_toEndOf="@id/guideline_marge_8"
+        app:layout_constraintStart_toEndOf="@id/old_image"/>
 
     <Button
         android:id="@+id/helped_button"
@@ -40,10 +42,9 @@
         android:layout_height="65dp"
         android:text="Helped"
 
-        tools:layout_editor_absoluteX="65dp"
-        tools:layout_editor_absoluteY="471dp"
-        android:layout_marginLeft="-305dp"
-        android:layout_marginTop="400dp"/>
+        app:layout_constraintStart_toStartOf="@id/old_image"
+        app:layout_constraintTop_toTopOf="@id/guideline_marge_6"
+        app:layout_constraintEnd_toEndOf="@id/old_image"/>
 
 
     <Button
@@ -51,10 +52,9 @@
         android:layout_width="102dp"
         android:layout_height="65dp"
         android:text="Helper"
-        tools:layout_editor_absoluteX="260dp"
-        tools:layout_editor_absoluteY="471dp"
-        android:layout_marginTop="400dp"
-        android:layout_marginLeft="60dp"/>
+        app:layout_constraintTop_toTopOf="@id/guideline_marge_6"
+        app:layout_constraintEnd_toEndOf="@id/young_image"
+        app:layout_constraintStart_toStartOf="@id/young_image"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_marge_3"

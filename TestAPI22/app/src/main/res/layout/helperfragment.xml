@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_gray"
-    tools:context=".HomeFragment"
+    android:background="#ABE"
+    tools:context=".CalendarFragment"
     android:orientation="vertical">
 
     <TextView
@@ -67,6 +67,27 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.2" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_marge_5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.7" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_marge_6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.78" />
+
+    <Button
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Menu Principal"
+        app:layout_constraintTop_toTopOf="@id/guideline_marge_5"
+        app:layout_constraintStart_toStartOf="@id/guideline_marge_1"
+        app:layout_constraintEnd_toEndOf="@id/guideline_marge_2"/>
     <!-- <ImageButton
         android:id="@+id/parameters"
         android:background="@color/gray"
