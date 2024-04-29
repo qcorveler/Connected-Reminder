@@ -1,6 +1,7 @@
 package com.example.testpensebeteapi22;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +19,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 public class AddFragment extends Fragment {
     EditText title;
@@ -41,14 +48,15 @@ public class AddFragment extends Fragment {
             @Override
             public void onClick(View v){
                 FirebaseDatabase database = FirebaseDatabase.getInstance("https://pense-bete-9293d-default-rtdb.europe-west1.firebasedatabase.app");
-                DatabaseReference myRef = database.getReference("events");
+                DatabaseReference myRef = database.getReference("users");
                 Event e = new Event(0, title.getText().toString(),subtitle.getText().toString(),"MED", "111;136;255", informations.getText().toString(), null, 50,10 );
                 if(eventReturnedListener != null) {
                     //TODO Gestion des entrées pour la création d'un event (date, couleur, icon...)
                     Toast.makeText(rootView.getContext(), "Pense-Bête ajouté avec succès !", Toast.LENGTH_LONG).show();
 
                 }
-                myRef.setValue(e);
+                String id = readConfig();
+                myRef.child(id).child("events").child(String.valueOf(e.getId_event())).setValue(e);
                 title.setText("");
                 subtitle.setText("");
                 informations.setText("");
@@ -97,6 +105,25 @@ public class AddFragment extends Fragment {
     public void setOnEventReturnedListener(OnEventReturnedListener listener){
         eventReturnedListener = listener;
     }
+    private String readConfig() {
+        // Obtenir le chemin du répertoire de stockage interne de l'application
+        ContextWrapper contextWrapper = new ContextWrapper(getActivity());
+        File directory = contextWrapper.getDir("config", Context.MODE_PRIVATE);
+        File configFile = new File(directory, "config.properties");
 
+        // Créer un objet Properties
+        Properties prop = new Properties();
+
+        try (FileInputStream input = new FileInputStream(configFile)) {
+            // Charger les propriétés à partir du fichier
+            prop.load(input);
+
+            // Récupérer l'identifiant à partir des propriétés
+            return prop.getProperty("id");
+        } catch (IOException io) {
+            io.printStackTrace();
+            return null;
+        }
+    }
 
 }
