@@ -3,6 +3,7 @@ package com.example.testpensebeteapi22;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
@@ -20,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -44,13 +46,22 @@ public class Login extends AppCompatActivity {
             public void onClick(View v) {
                 String emailTxt = email.getText().toString();
                 String passwordTxt = password.getText().toString();
+                String mode = readConfig();
+                String path;
+                if(mode.equals("1")){
+                    path =  "aidants";
+                }
+                else{
+                    path = "aidés";
+                }
 
                 if (emailTxt.isEmpty() || passwordTxt.isEmpty()) {
                     Toast.makeText(Login.this, "Veuillez entre votre email ou mot de passe", Toast.LENGTH_SHORT).show();
                 } else {
-                    database.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+                    database.child(path).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            Intent intent;
                             boolean trouve = false;
                             // On vérifie si un id correspond
                             for (DataSnapshot childSnapshot : snapshot.getChildren()) {
@@ -59,18 +70,22 @@ public class Login extends AppCompatActivity {
                                 String getEmail = snapshot.child(id).child("email").getValue(String.class);
                                 if (getEmail.equals(emailTxt) && getPwd.equals(passwordTxt)) {
                                     Toast.makeText(Login.this, "Connexion réussie", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(Login.this, MainMenuActivity.class);
+                                    if(mode.equals("1")){
+                                        intent = new Intent(Login.this, HelperActivity.class);
+                                    }
+                                    else{
+                                        intent= new Intent(Login.this, HelpedActivity.class);
+                                    }
                                     writeConfig(id);
                                     trouve = true;
-                                    //int idTransmis = Integer.parseInt(id);
-                                    //intent.putExtra("idConnexion",idTransmis);
                                     startActivity(intent);
                                     finish();
                                     break;
                                 }
                             }
-                            if(!trouve)
-                            Toast.makeText(Login.this, "Email/Password inconnus", Toast.LENGTH_SHORT).show();
+                            if(!trouve) {
+                                Toast.makeText(Login.this, "Email/Password inconnus", Toast.LENGTH_SHORT).show();
+                            }
                         }
 
                         @Override
@@ -98,7 +113,7 @@ public class Login extends AppCompatActivity {
 
             // Obtenir le chemin du répertoire de stockage interne de l'application
             ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
-            File directory = contextWrapper.getDir("config.properties", Context.MODE_PRIVATE);
+            File directory = contextWrapper.getDir("config", Context.MODE_PRIVATE);
             File configFile = new File(directory, "config.properties");
 
             if (!configFile.exists()) {
@@ -118,4 +133,24 @@ public class Login extends AppCompatActivity {
                 Toast.makeText(Login.this, "Erreur lors de l'enregistrement de l'identifiant", Toast.LENGTH_SHORT).show();
             }
         }
+    private String readConfig() {
+        // Obtenir le chemin du répertoire de stockage interne de l'application
+        ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
+        File directory = contextWrapper.getDir("config", Context.MODE_PRIVATE);
+        File configFile = new File(directory, "config.properties");
+
+        // Créer un objet Properties
+        Properties prop = new Properties();
+
+        try (FileInputStream input = new FileInputStream(configFile)) {
+            // Charger les propriétés à partir du fichier
+            prop.load(input);
+
+            // Récupérer l'identifiant à partir des propriétés
+            return prop.getProperty("mode");
+        } catch (IOException io) {
+            io.printStackTrace();
+            return null;
+        }
+    }
     }

@@ -53,7 +53,6 @@ public class AddFragment extends Fragment {
                 if(eventReturnedListener != null) {
                     //TODO Gestion des entrées pour la création d'un event (date, couleur, icon...)
                     Toast.makeText(rootView.getContext(), "Pense-Bête ajouté avec succès !", Toast.LENGTH_LONG).show();
-
                 }
                 String id = readConfig();
                 myRef.child(id).child("events").child(String.valueOf(e.getId_event())).setValue(e);

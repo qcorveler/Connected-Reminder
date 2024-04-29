@@ -3,6 +3,8 @@ package com.example.testpensebeteapi22;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +21,10 @@ import com.google.firebase.database.ValueEventListener;
 import org.checkerframework.common.value.qual.PolyValue;
 import org.w3c.dom.Text;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
 import java.util.Random;
 
 public class Register extends AppCompatActivity {
@@ -58,8 +64,16 @@ public class Register extends AppCompatActivity {
                     Toast.makeText(Register.this, "Les passwords ne sont pas les mêmes", Toast.LENGTH_SHORT).show();
                 }
                 else{
-
-                    database.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+                    String mode = readConfig();
+                    String path;
+                    if(mode.equals("1")){
+                        path =  "aidants";
+                    }
+                    else{
+                        path = "aidés";
+                    }
+                    System.out.println(path);
+                    database.child(path).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             // On regarde s'il n'y a pas déjà cet id dans la base de données
@@ -72,9 +86,9 @@ public class Register extends AppCompatActivity {
                         }
                     });
 
-                    database.child("users").child(idTxt).child("name").setValue(nameTxt);
-                    database.child("users").child(idTxt).child("email").setValue(emailTxt);
-                    database.child("users").child(idTxt).child("password").setValue(passwordTxt);
+                    database.child(path).child(idTxt).child("name").setValue(nameTxt);
+                    database.child(path).child(idTxt).child("email").setValue(emailTxt);
+                    database.child(path).child(idTxt).child("password").setValue(passwordTxt);
                     Toast.makeText(Register.this, "Utilisateur inscrit", Toast.LENGTH_SHORT).show();
                     finish();
                 }
@@ -87,5 +101,25 @@ public class Register extends AppCompatActivity {
                 finish();
             }
         });
+    }
+    private String readConfig() {
+        // Obtenir le chemin du répertoire de stockage interne de l'application
+        ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
+        File directory = contextWrapper.getDir("config", Context.MODE_PRIVATE);
+        File configFile = new File(directory, "config.properties");
+
+        // Créer un objet Properties
+        Properties prop = new Properties();
+
+        try (FileInputStream input = new FileInputStream(configFile)) {
+            // Charger les propriétés à partir du fichier
+            prop.load(input);
+
+            // Récupérer l'identifiant à partir des propriétés
+            return prop.getProperty("mode");
+        } catch (IOException io) {
+            io.printStackTrace();
+            return null;
+        }
     }
 }
