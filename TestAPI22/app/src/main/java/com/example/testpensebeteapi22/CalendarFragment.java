@@ -14,6 +14,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
@@ -32,6 +34,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Properties;
 
@@ -44,6 +47,7 @@ public class CalendarFragment extends Fragment {
 
     private TextView title;
     private EditText email;
+    ArrayList<String> aides;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -64,10 +68,38 @@ public class CalendarFragment extends Fragment {
         simpleCalendarView.setWeekSeparatorLineColor(Color.GREEN); // green color for the week separator line **/
         // perform setOnDateChangeListener event on CalendarView
 
+        CalendarFragment.this.listeAides();
+        ArrayList<String> l = CalendarFragment.this.getAides();
+        //System.out.println("La liste est :" + l.toString());
+
+        /**helped_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                System.out.println(l);
+                System.out.println(l);
+                System.out.println(l);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, l);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                helped_spinner.setAdapter(adapter);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                System.out.println(l);
+                System.out.println(l);
+                System.out.println(l);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, l);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                helped_spinner.setAdapter(adapter);
+            }
+        }); **/
+
         new_helped.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                System.out.println("Cliqué");
                 database.child("aidés").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -116,8 +148,6 @@ public class CalendarFragment extends Fragment {
             }
         });
 
-
-
         simpleCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
@@ -147,6 +177,43 @@ public class CalendarFragment extends Fragment {
             io.printStackTrace();
             return null;
         }
+    }
+    public void listeAides(){
+        DatabaseReference database = FirebaseDatabase.getInstance("https://pense-bete-9293d-default-rtdb.europe-west1.firebasedatabase.app").getReference();
+        String id_helper = readConfig();
+        database.child("aidants").child(id_helper).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<String> l = new ArrayList<>();
+                if (snapshot.exists()) {
+                    l = snapshot.child("list").getValue(new GenericTypeIndicator<ArrayList<String>>() {
+                    });
+                    if (l == null) {
+                        l = new ArrayList<>();
+                        System.out.println("null");
+                    }
+                    else{
+                        System.out.println(l.toString());
+                        CalendarFragment.this.setAides(l);
+                    }
+                }
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, CalendarFragment.this.getAides());
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                helped_spinner.setAdapter(adapter);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void setAides(ArrayList<String> aides) {
+        this.aides = aides;
+    }
+
+    public ArrayList<String> getAides() {
+        return aides;
     }
 }
 
