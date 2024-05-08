@@ -13,8 +13,8 @@
     <string name="add_title_input"><b>Titre</b></string>
     <string name="add_subtitle_input"><b>Sous Titre</b></string>
     <string name="add_information_input"><b>Informations</b></string>
-    <string name="add_date_input"><b>Date</b></string>
-    <string name="add_hour_input"><b>Heure</b></string>
+    <string name="add_date_input"><b>Date (JJ/MM/AAAA)</b></string>
+    <string name="add_hour_input"><b>Heure (HH:MM)</b></string>
     <string name="add_duration_input"><b>Durée</b></string>
     <string name="add_color_input"><b>Couleur</b></string>
 

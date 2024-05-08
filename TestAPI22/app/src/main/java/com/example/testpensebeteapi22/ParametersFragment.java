@@ -62,7 +62,7 @@ public class ParametersFragment extends Fragment {
                         //Pour ajouter les paramètres
                         Parameters value = dataSnapshot.getValue(Parameters.class);
                         Log.d("Pense-Bête error", "Value is: " + value);
-                        System.out.println("Event ajouté !");
+                        System.out.println("Paramètres ajoutés !");
                     }
 
                     @Override

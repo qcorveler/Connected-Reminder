@@ -1,5 +1,6 @@
 package com.example.testpensebeteapi22;
 
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,11 +23,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.threeten.bp.LocalDateTime;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Locale;
 import java.util.Properties;
 
 public class AddFragment extends Fragment {
@@ -33,9 +41,9 @@ public class AddFragment extends Fragment {
     EditText subtitle;
     EditText date;
     EditText informations;
+    EditText hour;
     Button add;
     OnEventReturnedListener eventReturnedListener;
-    private MaxIdCallback maxIdCallback;
 
     // Fragment permettant d'ajouter un pense bête à la base de données
     @Override
@@ -46,7 +54,9 @@ public class AddFragment extends Fragment {
         subtitle = rootView.findViewById(R.id.subtitle);
         informations = rootView.findViewById(R.id.informations);
         add = rootView.findViewById(R.id.add);
-        String id = readConfig();
+        hour = rootView.findViewById(R.id.heure);
+        date = rootView.findViewById(R.id.date);
+        String id = readConfig(); // On lit l'id de la personne aidée dans le fichier config
         add.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -57,11 +67,14 @@ public class AddFragment extends Fragment {
                     @Override
                     public void onMaxIdFound(String idEvent) {
                         // Utilisez idEvent une fois qu'il est disponible
-                        Event e = new Event(Integer.parseInt(idEvent), title.getText().toString(), subtitle.getText().toString(), "MED", "111;136;255", informations.getText().toString(), null, 50, 10);
+                        Date dateEvent = DateAuBonFormat(date.getText().toString(), hour.getText().toString());
+                        Event e = new Event(Integer.parseInt(idEvent), title.getText().toString(), subtitle.getText().toString(), "MED", "111;136;255", informations.getText().toString(), dateEvent, 50, 10);
                         myRef.child(id).child("events").child(idEvent).setValue(e);
                         title.setText("");
                         subtitle.setText("");
                         informations.setText("");
+                        date.setText("");
+                        hour.setText("");
                     }
                 });
                 if(eventReturnedListener != null) {
@@ -166,5 +179,20 @@ public class AddFragment extends Fragment {
         void onMaxIdFound(String id);
     }
 
+
+    public Date DateAuBonFormat(String date, String heure){
+        String[] e = date.split("/");
+        String[] h = heure.split(":");
+
+        // Construire une chaîne de caractères dans le format ISO 8601
+        String formattedDateTime = String.format(Locale.getDefault(), "%s-%s-%sT%s:%s:00", e[2], e[1], e[0], h[0], h[1]);
+
+        // Utiliser LocalDateTime.parse() avec un formateur DateTimeFormatter
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        LocalDateTime parsedDateTime = LocalDateTime.parse(formattedDateTime, formatter);
+
+        // Retourner la date et l'heure parsées
+        return new Date(parsedDateTime);
+    }
 
 }
