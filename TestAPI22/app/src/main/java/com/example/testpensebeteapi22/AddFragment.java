@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -22,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -33,6 +35,7 @@ public class AddFragment extends Fragment {
     EditText informations;
     Button add;
     OnEventReturnedListener eventReturnedListener;
+    private MaxIdCallback maxIdCallback;
 
     // Fragment permettant d'ajouter un pense bête à la base de données
     @Override
@@ -43,22 +46,30 @@ public class AddFragment extends Fragment {
         subtitle = rootView.findViewById(R.id.subtitle);
         informations = rootView.findViewById(R.id.informations);
         add = rootView.findViewById(R.id.add);
-
+        String id = readConfig();
         add.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 FirebaseDatabase database = FirebaseDatabase.getInstance("https://pense-bete-9293d-default-rtdb.europe-west1.firebasedatabase.app");
-                DatabaseReference myRef = database.getReference("users");
-                Event e = new Event(0, title.getText().toString(),subtitle.getText().toString(),"MED", "111;136;255", informations.getText().toString(), null, 50,10 );
+                DatabaseReference myRef = database.getReference("aidés");
+                System.out.println("Id séléctionné : " + id);
+                findId(id, new MaxIdCallback() {
+                    @Override
+                    public void onMaxIdFound(String idEvent) {
+                        // Utilisez idEvent une fois qu'il est disponible
+                        Event e = new Event(Integer.parseInt(idEvent), title.getText().toString(), subtitle.getText().toString(), "MED", "111;136;255", informations.getText().toString(), null, 50, 10);
+                        myRef.child(id).child("events").child(idEvent).setValue(e);
+                        title.setText("");
+                        subtitle.setText("");
+                        informations.setText("");
+                    }
+                });
                 if(eventReturnedListener != null) {
                     //TODO Gestion des entrées pour la création d'un event (date, couleur, icon...)
                     Toast.makeText(rootView.getContext(), "Pense-Bête ajouté avec succès !", Toast.LENGTH_LONG).show();
                 }
-                String id = readConfig();
-                myRef.child(id).child("events").child(String.valueOf(e.getId_event())).setValue(e);
-                title.setText("");
-                subtitle.setText("");
-                informations.setText("");
+
+
 
                 myRef.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -118,11 +129,42 @@ public class AddFragment extends Fragment {
             prop.load(input);
 
             // Récupérer l'identifiant à partir des propriétés
-            return prop.getProperty("id");
+            System.out.println(prop.getProperty("idSelectionne"));
+            return prop.getProperty("idSelectionne");
         } catch (IOException io) {
             io.printStackTrace();
             return null;
         }
     }
+
+    public void findId(String id, MaxIdCallback callback) {
+        DatabaseReference database = FirebaseDatabase.getInstance("https://pense-bete-9293d-default-rtdb.europe-west1.firebasedatabase.app").getReference();
+        database.child("aidés").child(id).child("events").addListenerForSingleValueEvent(new ValueEventListener() {
+            int max;
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                max = 0;
+                for (DataSnapshot childSnapshot : snapshot.getChildren()) {
+                    String idEventExistant = childSnapshot.getKey();
+                    if (Integer.parseInt(idEventExistant) > max) {
+                        max = Integer.parseInt(idEventExistant);
+                    }
+                }
+                // Appel du rappel avec la valeur maximale
+                callback.onMaxIdFound(String.valueOf(++max));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Gérer l'annulation si nécessaire
+            }
+        });
+    }
+
+    public interface MaxIdCallback {
+        void onMaxIdFound(String id);
+    }
+
 
 }

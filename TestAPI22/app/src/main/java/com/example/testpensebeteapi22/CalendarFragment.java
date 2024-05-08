@@ -30,8 +30,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
+import org.checkerframework.checker.units.qual.A;
+
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -47,14 +50,15 @@ public class CalendarFragment extends Fragment {
 
     private TextView title;
     private EditText email;
-    ArrayList<String> aides;
+    ArrayList<String> aidesId;
+    ArrayList<String> aidesNoms;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         DatabaseReference database = FirebaseDatabase.getInstance("https://pense-bete-9293d-default-rtdb.europe-west1.firebasedatabase.app").getReference();
 
-        View rootView = inflater.inflate(R.layout.helperfragment,container, false);
+        View rootView = inflater.inflate(R.layout.helperfragment, container, false);
         new_helped = rootView.findViewById(R.id.add_new_helped);
         title = rootView.findViewById(R.id.helper_fragment_title);
         helped_spinner = rootView.findViewById(R.id.spinner_helped);
@@ -63,43 +67,31 @@ public class CalendarFragment extends Fragment {
         //super.onCreate(savedInstanceState);
         simpleCalendarView = (CalendarView) rootView.findViewById(R.id.simpleCalendarView); // get the reference of CalendarView
         simpleCalendarView.setUnfocusedMonthDateColor(Color.BLUE); // set the yellow color for the dates of an unfocused month
-        simpleCalendarView.setFocusedMonthDateColor(Color.RED); // set the red color for the dates of  focused month
+        simpleCalendarView.setFocusedMonthDateColor(Color.RED); // set the red color for the dates of focused month
         simpleCalendarView.setSelectedWeekBackgroundColor(Color.RED); // red color for the selected week's background
         simpleCalendarView.setWeekSeparatorLineColor(Color.GREEN); // green color for the week separator line **/
         // perform setOnDateChangeListener event on CalendarView
 
-        CalendarFragment.this.listeAides();
-        ArrayList<String> l = CalendarFragment.this.getAides();
-        //System.out.println("La liste est :" + l.toString());
+        listeAides();
 
-        /**helped_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
+        helped_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println(l);
-                System.out.println(l);
-                System.out.println(l);
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, l);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-                helped_spinner.setAdapter(adapter);
+                String selectedValue = parent.getItemAtPosition(position).toString();
+                writeConfig(selectedValue);
+                // on sauvegarde l'id de la personne séléctionnée
+                Toast.makeText(getContext(), selectedValue + " Séléctionné", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                System.out.println(l);
-                System.out.println(l);
-                System.out.println(l);
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, l);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-                helped_spinner.setAdapter(adapter);
+                helped_spinner.setSelection(0);
             }
-        }); **/
+        });
 
-        new_helped.setOnClickListener(new View.OnClickListener(){
+        new_helped.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 database.child("aidés").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -118,8 +110,9 @@ public class CalendarFragment extends Fragment {
                                         List l = new ArrayList();
                                         if (snapshot.exists()) {
                                             // Si la liste existe déjà, récupérez-la d'abord
-                                            l = snapshot.child("list").getValue(new GenericTypeIndicator<List<String>>() {});
-                                            if(l == null){
+                                            l = snapshot.child("list").getValue(new GenericTypeIndicator<List<String>>() {
+                                            });
+                                            if (l == null) {
                                                 l = new ArrayList<>();
                                             }
                                         }
@@ -178,7 +171,8 @@ public class CalendarFragment extends Fragment {
             return null;
         }
     }
-    public void listeAides(){
+
+    public void listeAides() {
         DatabaseReference database = FirebaseDatabase.getInstance("https://pense-bete-9293d-default-rtdb.europe-west1.firebasedatabase.app").getReference();
         String id_helper = readConfig();
         database.child("aidants").child(id_helper).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -190,17 +184,18 @@ public class CalendarFragment extends Fragment {
                     });
                     if (l == null) {
                         l = new ArrayList<>();
-                        System.out.println("null");
-                    }
-                    else{
+                    } else {
                         System.out.println(l.toString());
-                        CalendarFragment.this.setAides(l);
+                        CalendarFragment.this.setAidesId(l);
                     }
                 }
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, CalendarFragment.this.getAides());
+                //ArrayList<String> noms = CalendarFragment.this.listeNomsAides(CalendarFragment.this.getAidesId());
+                //CalendarFragment.this.setAidesNoms(noms);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, CalendarFragment.this.getAidesId());
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 helped_spinner.setAdapter(adapter);
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -208,13 +203,75 @@ public class CalendarFragment extends Fragment {
         });
     }
 
-    public void setAides(ArrayList<String> aides) {
-        this.aides = aides;
+    public void setAidesId(ArrayList<String> aides) {
+        this.aidesId = aides;
     }
 
-    public ArrayList<String> getAides() {
-        return aides;
+    public ArrayList<String> getAidesId() {
+        return aidesId;
+    }
+
+   /** public ArrayList<String> listeNomsAides(List<String> aides) {
+        DatabaseReference database = FirebaseDatabase.getInstance("https://pense-bete-9293d-default-rtdb.europe-west1.firebasedatabase.app").getReference();
+        ArrayList<String> noms = new ArrayList<>();
+            database.child("aidés").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    int compteur =aides.size();
+                    while (compteur != 0) {
+                        for (String s : aides) {
+                            String nom = snapshot.child(s).child("name").getValue(String.class);
+                            noms.add(nom);
+                            compteur --;
+                        }
+                    }
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, noms);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    helped_spinner.setAdapter(adapter);
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        return noms;
+        } **/
+
+    public ArrayList<String> getAidesNoms() {
+        return aidesNoms;
+    }
+
+    public void setAidesNoms(ArrayList<String> aidesNoms) {
+        this.aidesNoms = aidesNoms;
+    }
+
+
+    private void writeConfig(String id){
+        // Créer un objet Properties
+        Properties prop = new Properties();
+        // Définir les propriétés
+        prop.setProperty("idSelectionne", id);
+
+        // Obtenir le chemin du répertoire de stockage interne de l'application
+        ContextWrapper contextWrapper = new ContextWrapper(getContext());
+        File directory = contextWrapper.getDir("config", Context.MODE_PRIVATE);
+        File configFile = new File(directory, "config.properties");
+
+        if (!configFile.exists()) {
+            try {
+                configFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        try (FileOutputStream output = new FileOutputStream(configFile)) {
+            // Enregistrer les propriétés dans le fichier
+            prop.store(output, "Fichier de configuration");
+            Toast.makeText(getContext(), "Mode de connexion enregistré avec succès", Toast.LENGTH_SHORT).show();
+        } catch (IOException io) {
+            io.printStackTrace();
+            Toast.makeText(getContext(), "Erreur lors de l'enregistrement du mode de connexion", Toast.LENGTH_SHORT).show();
+        }
     }
 }
-
-
