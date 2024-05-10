@@ -25,4 +25,13 @@
 
     </string-array>
 
+    <string-array name="event_types">
+        <item>RDV</item>
+        <item>Medicament</item>
+        <item>Anniversaire</item>
+        <item>Voeux</item>
+        <item>Autres</item>
+
+    </string-array>
+
 </resources>

@@ -45,6 +45,7 @@
             android:hint="@string/add_date_input"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:textColorHint="@color/black"
+            android:inputType="date"
             />
         <EditText
             android:id="@+id/heure"
@@ -52,6 +53,7 @@
             android:layout_width="match_parent"
             android:hint="@string/add_hour_input"
             android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:inputType="datetime"
             android:textColorHint="@color/black"
             />
         <EditText
@@ -61,12 +63,22 @@
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:textColorHint="@color/black"
             />
+        <!--
         <EditText
             android:layout_height="70dp"
             android:layout_width="match_parent"
             android:hint="@string/add_color_input"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:textColorHint="@color/black"
+            />
+            -->
+        <Spinner
+            android:id="@+id/type"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:entries="@array/event_types"
+            app:layout_constraintStart_toStartOf="@id/guideline_marge_9"
+            app:layout_constraintTop_toTopOf="@id/guideline_marge_5"
             />
     </LinearLayout>
 

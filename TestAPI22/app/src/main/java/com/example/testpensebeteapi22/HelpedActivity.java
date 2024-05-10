@@ -166,7 +166,7 @@ public class HelpedActivity extends AppCompatActivity {
         //region -------------- Récupération des évènements -------------
             /* TODO → RECUPERATION DES EVENEMENTS A PARTIR DE LA BDD */
             //region --- simulation de la récupération des évènements ---
-            Date date4 = new Date(LocalDateTime.parse("2024-01-01T00:00:00"));
+          /**  Date date4 = new Date(LocalDateTime.parse("2024-01-01T00:00:00"));
 
             Date date1 = new Date(); // format UTC pour la date et l'heure : LocalDateTime.parse("2023-12-20T15:00:00")
             date1 = new Date(date1.getDate().withHour(15).withMinute(0));
@@ -197,7 +197,10 @@ public class HelpedActivity extends AppCompatActivity {
             this.events_list.add(new Event(5, "BONNE ANNÉE !!! <3", "Meilleurs Voeux", "POS", "255;235;59", "Gros Bisous de la part de toute la famille :3, on pense à toi", date4, 1,70));
 
             this.banners_list.add(new Banner(1, "C'est l'anniversaire d'Annick !", "BTD", "255;235;59", "N'oublie pas de fêter l'anniversaire d'Annick aujourd'hui, voici son numéro si tu veux l'appeler : 07 83 73 84 50", date3, 72));
-            //endregion
+           **/
+          //TODO récupération des events dans la base de données
+
+           //endregion
 //            this.events_list.clear();
 
         sortEventList();

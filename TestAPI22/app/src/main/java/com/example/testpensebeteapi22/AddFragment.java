@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -32,7 +33,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
+
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -42,6 +46,7 @@ public class AddFragment extends Fragment {
     EditText date;
     EditText informations;
     EditText hour;
+    Spinner type;
     Button add;
     OnEventReturnedListener eventReturnedListener;
 
@@ -49,54 +54,24 @@ public class AddFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.addfragment,container, false);
-
         title = rootView.findViewById(R.id.title);
         subtitle = rootView.findViewById(R.id.subtitle);
         informations = rootView.findViewById(R.id.informations);
         add = rootView.findViewById(R.id.add);
         hour = rootView.findViewById(R.id.heure);
         date = rootView.findViewById(R.id.date);
-        String id = readConfig(); // On lit l'id de la personne aidée dans le fichier config
+        type = rootView.findViewById(R.id.type);
+        HashMap<String, Integer> icones = iconesEvents();
+        HashMap<String, String> couleurs = couleursEvents();
+        System.out.println("Icones : " + icones.toString());
+        System.out.println("Couleurs : " + couleurs.toString());
         add.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                FirebaseDatabase database = FirebaseDatabase.getInstance("https://pense-bete-9293d-default-rtdb.europe-west1.firebasedatabase.app");
-                DatabaseReference myRef = database.getReference("aidés");
-                System.out.println("Id séléctionné : " + id);
+                String id = readConfig(); // On lit l'id de la personne aidée dans le fichier config
                 findId(id, new MaxIdCallback() {
                     @Override
                     public void onMaxIdFound(String idEvent) {
-                        // Utilisez idEvent une fois qu'il est disponible
-                        Date dateEvent = DateAuBonFormat(date.getText().toString(), hour.getText().toString());
-                        Event e = new Event(Integer.parseInt(idEvent), title.getText().toString(), subtitle.getText().toString(), "MED", "111;136;255", informations.getText().toString(), dateEvent, 50, 10);
-                        myRef.child(id).child("events").child(idEvent).setValue(e);
-                        title.setText("");
-                        subtitle.setText("");
-                        informations.setText("");
-                        date.setText("");
-                        hour.setText("");
-                    }
-                });
-                if(eventReturnedListener != null) {
-                    //TODO Gestion des entrées pour la création d'un event (date, couleur, icon...)
-                    Toast.makeText(rootView.getContext(), "Pense-Bête ajouté avec succès !", Toast.LENGTH_LONG).show();
-                }
-
-
-
-                myRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        //Pour ajouter l'event
-                        Event value = dataSnapshot.getValue(Event.class);
-                        Log.d("Pense-Bête error", "Value is: " + value);
-                        System.out.println("Event ajouté !");
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError error) {
-                        // Erreur lors de l'ajout à la base de données
-                        Log.w("Erreur lors de l'ajout" ,"Failed to read value.", error.toException());
                     }
                 });
             }
@@ -152,20 +127,17 @@ public class AddFragment extends Fragment {
 
     public void findId(String id, MaxIdCallback callback) {
         DatabaseReference database = FirebaseDatabase.getInstance("https://pense-bete-9293d-default-rtdb.europe-west1.firebasedatabase.app").getReference();
-        database.child("aidés").child(id).child("events").addListenerForSingleValueEvent(new ValueEventListener() {
-            int max;
+        DatabaseReference eventsRef = database.child("aidés").child(id).child("events");
 
+        eventsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                max = 0;
-                for (DataSnapshot childSnapshot : snapshot.getChildren()) {
-                    String idEventExistant = childSnapshot.getKey();
-                    if (Integer.parseInt(idEventExistant) > max) {
-                        max = Integer.parseInt(idEventExistant);
-                    }
+                // Vérifiez si la node "events" existe
+                if (!snapshot.exists()) {
+                    // Si elle n'existe pas, on la crée
+                    eventsRef.setValue(true);
                 }
-                // Appel du rappel avec la valeur maximale
-                callback.onMaxIdFound(String.valueOf(++max));
+                findMaxIdAndAddEvent(eventsRef, callback);
             }
 
             @Override
@@ -174,6 +146,61 @@ public class AddFragment extends Fragment {
             }
         });
     }
+
+    private void findMaxIdAndAddEvent(DatabaseReference eventsRef, MaxIdCallback callback) {
+        // Maintenant, continuez avec la logique pour trouver l'ID maximal
+        eventsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int max = 0;
+                for (DataSnapshot childSnapshot : snapshot.getChildren()) {
+                    String idEventExistant = childSnapshot.getKey();
+                    if (idEventExistant != null) {
+                        int eventId = Integer.parseInt(idEventExistant);
+                        if (eventId > max) {
+                            max = eventId;
+                        }
+                    }
+                }
+
+                // Appel du callback avec la valeur maximale
+                callback.onMaxIdFound(String.valueOf(++max));
+
+                // Ajouter l'événement si la node "events" existait déjà
+                if (max >= 0) {
+                    addEvent(eventsRef, max);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Gérer l'annulation si nécessaire
+            }
+        });
+    }
+
+    private void addEvent(DatabaseReference eventsRef, int maxId) {
+        // Ajouter l'événement à la node "events" avec l'ID max
+        Date dateEvent = DateAuBonFormat(date.getText().toString(), hour.getText().toString());
+        String typeString = type.getSelectedItem().toString();
+        HashMap<String, Integer> icones = iconesEvents();
+        HashMap<String, String> couleurs = couleursEvents();
+        System.out.println(typeString);
+        Integer icone = icones.containsKey(typeString) ? icones.get(typeString) : Integer.valueOf(1);
+        String couleur = couleurs.containsKey(typeString) ? couleurs.get(typeString) : "0;193;0";
+        // TODO dateEvent fait crash l'application si la date ou l'heure n'est pas renseignée ou pas dans le bon format
+        Event e = new Event(maxId, title.getText().toString(), subtitle.getText().toString(), typeString, couleur, informations.getText().toString(), dateEvent, 50, icone);
+        eventsRef.child(String.valueOf(maxId)).setValue(e);
+        title.setText("");
+        subtitle.setText("");
+        informations.setText("");
+        date.setText("");
+        hour.setText("");
+
+    }
+
+
+
 
     public interface MaxIdCallback {
         void onMaxIdFound(String id);
@@ -193,6 +220,26 @@ public class AddFragment extends Fragment {
 
         // Retourner la date et l'heure parsées
         return new Date(parsedDateTime);
+    }
+
+    public HashMap<String, String> couleursEvents(){
+        HashMap<String, String> couleurs = new HashMap<>();
+        couleurs.put("Medicaments", "253;82;82");
+        couleurs.put("Anniversaire","255;235;59");
+        couleurs.put("Voeux", "255;235;59");
+        couleurs.put("RDV", "111;136;255");
+        couleurs.put("Autres", "0;193;255");
+        return couleurs;
+    }
+
+    public HashMap<String, Integer> iconesEvents(){
+        HashMap<String,Integer> icones = new HashMap<>();
+        icones.put("Medicaments", 5);
+        icones.put("Anniversaire", 72);
+        icones.put("Voeux",70);
+        icones.put("RDV", 10);
+        icones.put("Autres", 62);
+        return icones;
     }
 
 }
