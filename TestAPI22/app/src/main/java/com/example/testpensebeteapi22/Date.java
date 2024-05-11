@@ -32,6 +32,7 @@ public class Date {
     /** La date par défaut est la date actuelle */
     public Date(){date = LocalDateTime.now();}
 
+
     /** Instanciation de la classe date à partir d'une date de la classe {@link LocalDateTime}
      * @param date date à laquelle va être instancié l'objet {@link Date} */
     public Date(LocalDateTime date){this.date = date;}

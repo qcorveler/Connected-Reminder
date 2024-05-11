@@ -77,6 +77,7 @@ public class Login extends AppCompatActivity {
                                         intent= new Intent(Login.this, HelpedActivity.class);
                                     }
                                     writeConfig(id);
+                                    new GlobalData(id);
                                     trouve = true;
                                     startActivity(intent);
                                     finish();

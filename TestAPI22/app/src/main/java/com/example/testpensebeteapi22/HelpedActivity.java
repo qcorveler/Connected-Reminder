@@ -2,6 +2,8 @@ package com.example.testpensebeteapi22;
 
 import org.threeten.bp.LocalDateTime;
 
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -15,14 +17,25 @@ import android.widget.TextView;
 
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Properties;
 
 /** <p> <b> Cette version est un prototype destiné à être montré à la Soutenance Intermédiaire de notre projet.<br>
  * Le but de ce prototype est de fonctionner sur la version 5.1 d'Android (API 22) (la tablette dont nous disposions pour la soutenance
@@ -199,8 +212,28 @@ public class HelpedActivity extends AppCompatActivity {
             this.banners_list.add(new Banner(1, "C'est l'anniversaire d'Annick !", "BTD", "255;235;59", "N'oublie pas de fêter l'anniversaire d'Annick aujourd'hui, voici son numéro si tu veux l'appeler : 07 83 73 84 50", date3, 72));
            **/
           //TODO récupération des events dans la base de données
+        String id = GlobalData.id;
+        DatabaseReference database = FirebaseDatabase.getInstance("https://pense-bete-9293d-default-rtdb.europe-west1.firebasedatabase.app").getReference();
+        DatabaseReference helpedRef = database.child("aidés").child(id).child("events");
+        helpedRef.addListenerForSingleValueEvent(new ValueEventListener(){
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot childSnapshot : snapshot.getChildren()) {
+                    String idEvent = childSnapshot.getKey();
+                    Event e = snapshot.child(idEvent).getValue(Event.class);
+                    events_list.add(e);
+                }
+            }
 
-           //endregion
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+            //endregion
 //            this.events_list.clear();
 
         sortEventList();
@@ -800,6 +833,26 @@ public class HelpedActivity extends AppCompatActivity {
     }
 
     public Thread getBackgroundPastEvents(){return this.backgroundPastEvents;}
+    private String readConfig() {
+        // Obtenir le chemin du répertoire de stockage interne de l'application
+        ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
+        File directory = contextWrapper.getDir("config", Context.MODE_PRIVATE);
+        File configFile = new File(directory, "config.properties");
+
+        // Créer un objet Properties
+        Properties prop = new Properties();
+
+        try (FileInputStream input = new FileInputStream(configFile)) {
+            // Charger les propriétés à partir du fichier
+            prop.load(input);
+
+            // Récupérer l'identifiant à partir des propriétés
+            return prop.getProperty("id");
+        } catch (IOException io) {
+            io.printStackTrace();
+            return null;
+        }
+    }
 
     /* TODO → METTRE UNE PAGE DE PARAMÈTRES --- OU PEUT-ÊTRE QUE LES PARAMÈTRES PEUVENT AUSSI ÊTRE GÉRÉS À DISTANCE PAR L'AIDANT */
     /* TODO → FAIRE EN SORTE QUE L'APPLICATION SOIT UTILISABLE SUR TELEPHONE (MÊME SI C'EST MOCHE)*/

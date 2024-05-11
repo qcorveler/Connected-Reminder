@@ -48,7 +48,6 @@ public class AddFragment extends Fragment {
     EditText hour;
     Spinner type;
     Button add;
-    OnEventReturnedListener eventReturnedListener;
 
     // Fragment permettant d'ajouter un pense bête à la base de données
     @Override
@@ -61,14 +60,15 @@ public class AddFragment extends Fragment {
         hour = rootView.findViewById(R.id.heure);
         date = rootView.findViewById(R.id.date);
         type = rootView.findViewById(R.id.type);
-        HashMap<String, Integer> icones = iconesEvents();
+        /**HashMap<String, Integer> icones = iconesEvents();
         HashMap<String, String> couleurs = couleursEvents();
         System.out.println("Icones : " + icones.toString());
-        System.out.println("Couleurs : " + couleurs.toString());
+        System.out.println("Couleurs : " + couleurs.toString()); **/
         add.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                String id = readConfig(); // On lit l'id de la personne aidée dans le fichier config
+                //String id = readConfig(); // On lit l'id de la personne aidée dans le fichier config
+                String id = GlobalData.id;
                 findId(id, new MaxIdCallback() {
                     @Override
                     public void onMaxIdFound(String idEvent) {
@@ -79,31 +79,7 @@ public class AddFragment extends Fragment {
         return rootView;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnEventReturnedListener) {
-            eventReturnedListener = (OnEventReturnedListener) context;
-        } else {
-            throw new RuntimeException(context.toString() + " must implement OnEventReturnedListener");
-        }
-    }
-
-    // Je pense qu'on pourra supprimer les 3 méthodes suivantes mais je les garde au cas où
-    public interface OnEventReturnedListener{
-        void onEventReturned(Event e);
-    }
-
-    public void returnEventToActivity(Event e){
-        if(eventReturnedListener != null){
-            eventReturnedListener.onEventReturned(e);
-        }
-    }
-
-    public void setOnEventReturnedListener(OnEventReturnedListener listener){
-        eventReturnedListener = listener;
-    }
-    private String readConfig() {
+    /** private String readConfig() {
         // Obtenir le chemin du répertoire de stockage interne de l'application
         ContextWrapper contextWrapper = new ContextWrapper(getActivity());
         File directory = contextWrapper.getDir("config", Context.MODE_PRIVATE);
@@ -123,7 +99,7 @@ public class AddFragment extends Fragment {
             io.printStackTrace();
             return null;
         }
-    }
+    } **/
 
     public void findId(String id, MaxIdCallback callback) {
         DatabaseReference database = FirebaseDatabase.getInstance("https://pense-bete-9293d-default-rtdb.europe-west1.firebasedatabase.app").getReference();
@@ -241,5 +217,7 @@ public class AddFragment extends Fragment {
         icones.put("Autres", 62);
         return icones;
     }
+
+
 
 }

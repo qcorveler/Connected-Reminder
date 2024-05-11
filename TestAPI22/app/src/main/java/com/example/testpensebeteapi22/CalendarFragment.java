@@ -71,7 +71,6 @@ public class CalendarFragment extends Fragment {
         simpleCalendarView.setSelectedWeekBackgroundColor(Color.RED); // red color for the selected week's background
         simpleCalendarView.setWeekSeparatorLineColor(Color.GREEN); // green color for the week separator line **/
         // perform setOnDateChangeListener event on CalendarView
-
         listeAides();
 
         helped_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -174,7 +173,8 @@ public class CalendarFragment extends Fragment {
 
     public void listeAides() {
         DatabaseReference database = FirebaseDatabase.getInstance("https://pense-bete-9293d-default-rtdb.europe-west1.firebasedatabase.app").getReference();
-        String id_helper = readConfig();
+        //String id_helper = readConfig();
+        String id_helper = GlobalData.id;
         database.child("aidants").child(id_helper).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
