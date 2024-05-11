@@ -71,10 +71,10 @@ public class MainMenuActivity extends AppCompatActivity {
         try (FileOutputStream output = new FileOutputStream(configFile)) {
             // Enregistrer les propriétés dans le fichier
             prop.store(output, "Fichier de configuration");
-            Toast.makeText(MainMenuActivity.this, "Mode de connexion enregistré avec succès", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(MainMenuActivity.this, "Mode de connexion enregistré avec succès", Toast.LENGTH_SHORT).show();
         } catch (IOException io) {
             io.printStackTrace();
-            Toast.makeText(MainMenuActivity.this, "Erreur lors de l'enregistrement du mode de connexion", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(MainMenuActivity.this, "Erreur lors de l'enregistrement du mode de connexion", Toast.LENGTH_SHORT).show();
         }
     }
 }

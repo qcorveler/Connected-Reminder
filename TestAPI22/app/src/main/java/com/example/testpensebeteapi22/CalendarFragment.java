@@ -1,6 +1,7 @@
 package com.example.testpensebeteapi22;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
@@ -44,7 +45,6 @@ import java.util.Properties;
 public class CalendarFragment extends Fragment {
 
     CalendarView simpleCalendarView;
-
     private Spinner helped_spinner;
     private Button new_helped;
 
@@ -78,6 +78,7 @@ public class CalendarFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedValue = parent.getItemAtPosition(position).toString();
                 writeConfig(selectedValue);
+                nomPersonne(selectedValue);
                 // on sauvegarde l'id de la personne séléctionnée
                 Toast.makeText(getContext(), selectedValue + " Séléctionné", Toast.LENGTH_SHORT).show();
             }
@@ -117,7 +118,7 @@ public class CalendarFragment extends Fragment {
                                         }
                                         l.add(id);
                                         database.child("aidants").child(id_helper).child("list").setValue(l);
-                                        Toast.makeText(rootView.getContext(), "Liste modifiée", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(rootView.getContext(), "Utilisateur ajouté !", Toast.LENGTH_LONG).show();
 
                                     }
 
@@ -268,10 +269,32 @@ public class CalendarFragment extends Fragment {
         try (FileOutputStream output = new FileOutputStream(configFile)) {
             // Enregistrer les propriétés dans le fichier
             prop.store(output, "Fichier de configuration");
-            Toast.makeText(getContext(), "Mode de connexion enregistré avec succès", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getContext(), "Mode de connexion enregistré avec succès", Toast.LENGTH_SHORT).show();
         } catch (IOException io) {
             io.printStackTrace();
-            Toast.makeText(getContext(), "Erreur lors de l'enregistrement du mode de connexion", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getContext(), "Erreur lors de l'enregistrement du mode de connexion", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void nomPersonne(String idSelectionne){
+        DatabaseReference database = FirebaseDatabase.getInstance("https://pense-bete-9293d-default-rtdb.europe-west1.firebasedatabase.app").getReference();
+        database.child("aidés").addListenerForSingleValueEvent(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot childSnapshot : snapshot.getChildren()){
+                    String key = childSnapshot.getKey();
+                    if(key.equals(idSelectionne)){
+                        String nom = snapshot.child(key).child("name").getValue(String.class);
+                        title.setText("Planning de " + nom);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }

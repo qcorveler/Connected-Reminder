@@ -128,10 +128,10 @@ public class Login extends AppCompatActivity {
             try (FileOutputStream output = new FileOutputStream(configFile)) {
                 // Enregistrer les propriétés dans le fichier
                 prop.store(output, "Fichier de configuration");
-                Toast.makeText(Login.this, "Identifiant enregistré avec succès", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(Login.this, "Identifiant enregistré avec succès", Toast.LENGTH_SHORT).show();
             } catch (IOException io) {
                 io.printStackTrace();
-                Toast.makeText(Login.this, "Erreur lors de l'enregistrement de l'identifiant", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(Login.this, "Erreur lors de l'enregistrement de l'identifiant", Toast.LENGTH_SHORT).show();
             }
         }
     private String readConfig() {

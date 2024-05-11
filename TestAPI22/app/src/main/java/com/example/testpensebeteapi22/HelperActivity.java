@@ -97,10 +97,10 @@ public class HelperActivity extends AppCompatActivity  {
         try (FileOutputStream output = new FileOutputStream(configFile)) {
             // Enregistrer les propriétés dans le fichier
             prop.store(output, "Fichier de configuration");
-            Toast.makeText(getApplicationContext(), "Id enregistré", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "Id enregistré", Toast.LENGTH_SHORT).show();
         } catch (IOException io) {
             io.printStackTrace();
-            Toast.makeText(getApplicationContext(), "Erreur lors de l'enregistrement du mode de connexion", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(getApplicationContext(), "Erreur lors de l'enregistrement du mode de connexion", Toast.LENGTH_SHORT).show();
         }
     }
 

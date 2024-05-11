@@ -102,7 +102,6 @@ public class AddFragment extends Fragment {
     }
 
     private void findMaxIdAndAddEvent(DatabaseReference eventsRef, MaxIdCallback callback) {
-        // Maintenant, continuez avec la logique pour trouver l'ID maximal
         eventsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -121,7 +120,7 @@ public class AddFragment extends Fragment {
                 callback.onMaxIdFound(String.valueOf(++max));
 
                 // Ajouter l'événement si la node "events" existait déjà
-                if (max >= 0) {
+                if (max > 0) {
                     addEvent(eventsRef, max);
                 }
             }

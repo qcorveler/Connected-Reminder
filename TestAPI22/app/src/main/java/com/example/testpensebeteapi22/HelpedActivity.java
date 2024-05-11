@@ -179,7 +179,6 @@ public class HelpedActivity extends AppCompatActivity {
         //endregion ---------------- FIN affichage de l'heure ---------------
 
         //region -------------- Récupération des évènements -------------
-            /* TODO → RECUPERATION DES EVENEMENTS A PARTIR DE LA BDD */
             //region --- simulation de la récupération des évènements ---
           /**  Date date4 = new Date(LocalDateTime.parse("2024-01-01T00:00:00"));
 
@@ -213,7 +212,6 @@ public class HelpedActivity extends AppCompatActivity {
 
             this.banners_list.add(new Banner(1, "C'est l'anniversaire d'Annick !", "BTD", "255;235;59", "N'oublie pas de fêter l'anniversaire d'Annick aujourd'hui, voici son numéro si tu veux l'appeler : 07 83 73 84 50", date3, 72));
            **/
-          //TODO récupération des events dans la base de données
         String id = GlobalData.id;
         DatabaseReference database = FirebaseDatabase.getInstance("https://pense-bete-9293d-default-rtdb.europe-west1.firebasedatabase.app").getReference();
         DatabaseReference helpedRef = database.child("aidés").child(id).child("events");
@@ -873,6 +871,7 @@ public class HelpedActivity extends AppCompatActivity {
         helpedRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // Récupère tous les attributs d'un event dans la base de données et en crée un puis l'ajoute à la liste des events
                 System.out.println(snapshot.toString());
                 System.out.println("Children" + snapshot.getChildren().toString());
                 String title = snapshot.child("title").getValue(String.class);
@@ -917,7 +916,6 @@ public class HelpedActivity extends AppCompatActivity {
         return new Date(parsedDateTime);
     }
 
-    /* TODO → METTRE UNE PAGE DE PARAMÈTRES --- OU PEUT-ÊTRE QUE LES PARAMÈTRES PEUVENT AUSSI ÊTRE GÉRÉS À DISTANCE PAR L'AIDANT */
     /* TODO → FAIRE EN SORTE QUE L'APPLICATION SOIT UTILISABLE SUR TELEPHONE (MÊME SI C'EST MOCHE)*/
     /* TODO → SOUNDS */
     /* TODO → POP-UP AU MOMENT DE CLIQUER SUR BACK QUAND ON A PAS CONFIRMÉ L'EVENT */
