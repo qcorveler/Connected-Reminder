@@ -34,6 +34,7 @@ import java.io.InputStream;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -67,8 +68,7 @@ public class AddFragment extends Fragment {
         add.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                //String id = readConfig(); // On lit l'id de la personne aidée dans le fichier config
-                String id = GlobalData.id;
+                String id = readConfig(); // On lit l'id de la personne aidée dans le fichier config
                 findId(id, new MaxIdCallback() {
                     @Override
                     public void onMaxIdFound(String idEvent) {
@@ -78,28 +78,6 @@ public class AddFragment extends Fragment {
         });
         return rootView;
     }
-
-    /** private String readConfig() {
-        // Obtenir le chemin du répertoire de stockage interne de l'application
-        ContextWrapper contextWrapper = new ContextWrapper(getActivity());
-        File directory = contextWrapper.getDir("config", Context.MODE_PRIVATE);
-        File configFile = new File(directory, "config.properties");
-
-        // Créer un objet Properties
-        Properties prop = new Properties();
-
-        try (FileInputStream input = new FileInputStream(configFile)) {
-            // Charger les propriétés à partir du fichier
-            prop.load(input);
-
-            // Récupérer l'identifiant à partir des propriétés
-            System.out.println(prop.getProperty("idSelectionne"));
-            return prop.getProperty("idSelectionne");
-        } catch (IOException io) {
-            io.printStackTrace();
-            return null;
-        }
-    } **/
 
     public void findId(String id, MaxIdCallback callback) {
         DatabaseReference database = FirebaseDatabase.getInstance("https://pense-bete-9293d-default-rtdb.europe-west1.firebasedatabase.app").getReference();
@@ -157,16 +135,22 @@ public class AddFragment extends Fragment {
 
     private void addEvent(DatabaseReference eventsRef, int maxId) {
         // Ajouter l'événement à la node "events" avec l'ID max
-        Date dateEvent = DateAuBonFormat(date.getText().toString(), hour.getText().toString());
+        //Date dateEvent = DateAuBonFormat(date.getText().toString(), hour.getText().toString());
         String typeString = type.getSelectedItem().toString();
+        ArrayList<String[]> d = DateSplit(date.getText().toString(), hour.getText().toString());
         HashMap<String, Integer> icones = iconesEvents();
         HashMap<String, String> couleurs = couleursEvents();
         System.out.println(typeString);
         Integer icone = icones.containsKey(typeString) ? icones.get(typeString) : Integer.valueOf(1);
         String couleur = couleurs.containsKey(typeString) ? couleurs.get(typeString) : "0;193;0";
         // TODO dateEvent fait crash l'application si la date ou l'heure n'est pas renseignée ou pas dans le bon format
-        Event e = new Event(maxId, title.getText().toString(), subtitle.getText().toString(), typeString, couleur, informations.getText().toString(), dateEvent, 50, icone);
+        Event e = new Event(maxId, title.getText().toString(), subtitle.getText().toString(), typeString, couleur, informations.getText().toString(), null, 50, icone);
         eventsRef.child(String.valueOf(maxId)).setValue(e);
+        eventsRef.child(String.valueOf(maxId)).child("annee").setValue(d.get(0)[2]);
+        eventsRef.child(String.valueOf(maxId)).child("mois").setValue(d.get(0)[1]);
+        eventsRef.child(String.valueOf(maxId)).child("jour").setValue(d.get(0)[0]);
+        eventsRef.child(String.valueOf(maxId)).child("heure").setValue(d.get(1)[0]);
+        eventsRef.child(String.valueOf(maxId)).child("minute").setValue(d.get(1)[1]);
         title.setText("");
         subtitle.setText("");
         informations.setText("");
@@ -174,9 +158,6 @@ public class AddFragment extends Fragment {
         hour.setText("");
 
     }
-
-
-
 
     public interface MaxIdCallback {
         void onMaxIdFound(String id);
@@ -190,12 +171,20 @@ public class AddFragment extends Fragment {
         // Construire une chaîne de caractères dans le format ISO 8601
         String formattedDateTime = String.format(Locale.getDefault(), "%s-%s-%sT%s:%s:00", e[2], e[1], e[0], h[0], h[1]);
 
-        // Utiliser LocalDateTime.parse() avec un formateur DateTimeFormatter
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         LocalDateTime parsedDateTime = LocalDateTime.parse(formattedDateTime, formatter);
 
         // Retourner la date et l'heure parsées
         return new Date(parsedDateTime);
+    }
+
+    public ArrayList<String[]> DateSplit(String date, String heure){
+        String[] e = date.split("/");
+        String[] h = heure.split(":");
+        ArrayList<String[]> d = new ArrayList<>();
+        d.add(e);
+        d.add(h);
+        return d;
     }
 
     public HashMap<String, String> couleursEvents(){
@@ -216,6 +205,26 @@ public class AddFragment extends Fragment {
         icones.put("RDV", 10);
         icones.put("Autres", 62);
         return icones;
+    }
+    private String readConfig() {
+        // Obtenir le chemin du répertoire de stockage interne de l'application
+        ContextWrapper contextWrapper = new ContextWrapper(getActivity());
+        File directory = contextWrapper.getDir("config", Context.MODE_PRIVATE);
+        File configFile = new File(directory, "config.properties");
+
+        // Créer un objet Properties
+        Properties prop = new Properties();
+
+        try (FileInputStream input = new FileInputStream(configFile)) {
+            // Charger les propriétés à partir du fichier
+            prop.load(input);
+
+            // Récupérer l'identifiant à partir des propriétés
+            return prop.getProperty("idSelectionne");
+        } catch (IOException io) {
+            io.printStackTrace();
+            return null;
+        }
     }
 
 

@@ -234,4 +234,8 @@ public class Date {
         Date today = new Date();
         return today.date.plusMinutes(minutes).compareTo(this.date) > 0;
     }
+
+    public String toString(){
+        return date.toString();
+    }
 }

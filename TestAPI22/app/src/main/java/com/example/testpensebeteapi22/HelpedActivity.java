@@ -1,6 +1,7 @@
 package com.example.testpensebeteapi22;
 
 import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.format.DateTimeFormatter;
 
 import android.content.Context;
 import android.content.ContextWrapper;
@@ -35,6 +36,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Locale;
 import java.util.Properties;
 
 /** <p> <b> Cette version est un prototype destiné à être montré à la Soutenance Intermédiaire de notre projet.<br>
@@ -220,8 +222,11 @@ public class HelpedActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot childSnapshot : snapshot.getChildren()) {
                     String idEvent = childSnapshot.getKey();
-                    Event e = snapshot.child(idEvent).getValue(Event.class);
-                    events_list.add(e);
+                    if(idEvent != null) {
+                        eventInDatabase(idEvent);
+                        System.out.println("Event ajouté");
+                        events_list.toString();
+                    }
                 }
             }
 
@@ -231,6 +236,12 @@ public class HelpedActivity extends AppCompatActivity {
 
             }
         });
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Events list :" + events_list.toString());
 
 
             //endregion
@@ -597,8 +608,10 @@ public class HelpedActivity extends AppCompatActivity {
         // Récupération des events du jour dans la liste day_events
         day_events.clear();
         day_events_layout.removeAllViews();
+        System.out.println("Event list in displayDayEvents : " + events_list.toString());
         for (Event e : events_list){
             if (e.getDate().sameDate(display_date)){
+                System.out.println("Day trouvé");
                 day_events.add(e);
             }
         }
@@ -852,6 +865,56 @@ public class HelpedActivity extends AppCompatActivity {
             io.printStackTrace();
             return null;
         }
+    }
+
+    public void eventInDatabase(String id){
+        DatabaseReference database = FirebaseDatabase.getInstance("https://pense-bete-9293d-default-rtdb.europe-west1.firebasedatabase.app").getReference();
+        DatabaseReference helpedRef = database.child("aidés").child(GlobalData.id).child("events").child(id);
+        helpedRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                System.out.println(snapshot.toString());
+                System.out.println("Children" + snapshot.getChildren().toString());
+                String title = snapshot.child("title").getValue(String.class);
+                System.out.println(title);
+                String subtitle = snapshot.child("subtitle").getValue(String.class);
+                String informations = snapshot.child("informations").getValue(String.class);
+                System.out.println("Info " + informations);
+                String jour = snapshot.child("jour").getValue(String.class);
+                System.out.println("Jour" + jour);
+                String annee = snapshot.child("annee").getValue(String.class);
+                String mois = snapshot.child("mois").getValue(String.class);
+                String heure = snapshot.child("heure").getValue(String.class);
+                String minute = snapshot.child("minute").getValue(String.class);
+                String couleur = snapshot.child("color").getValue(String.class);
+                String type = snapshot.child("type").getValue(String.class);
+                Integer id = snapshot.child("id_event").getValue(Integer.class);
+                Integer icone = snapshot.child("iconId").getValue(Integer.class);
+                System.out.println(icone);
+                Date date = DateAuBonFormat(annee,mois,jour,heure,minute);
+                System.out.println(date);
+                Event e = new Event(id,title,subtitle,type,couleur, informations,date,10,icone);
+                System.out.println(e.toString());
+                events_list.add(e);
+                System.out.println(events_list.toString());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public Date DateAuBonFormat(String annee, String mois, String jour, String heure, String minute){
+
+        String formattedDateTime = String.format(Locale.getDefault(), "%s-%s-%sT%s:%s:00", annee, mois, jour, heure, minute);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        LocalDateTime parsedDateTime = LocalDateTime.parse(formattedDateTime, formatter);
+
+        // Retourner la date et l'heure parsées
+        return new Date(parsedDateTime);
     }
 
     /* TODO → METTRE UNE PAGE DE PARAMÈTRES --- OU PEUT-ÊTRE QUE LES PARAMÈTRES PEUVENT AUSSI ÊTRE GÉRÉS À DISTANCE PAR L'AIDANT */

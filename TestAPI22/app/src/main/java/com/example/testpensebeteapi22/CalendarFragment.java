@@ -100,7 +100,7 @@ public class CalendarFragment extends Fragment {
                             String getEmail = snapshot.child(id).child("email").getValue(String.class);
                             System.out.println(getEmail);
                             if (getEmail.equals(email.getText().toString())) {
-                                String id_helper = readConfig();
+                                String id_helper = GlobalData.id;
                                 System.out.println("Trouvé");
                                 database.child("aidants").child(id_helper).addListenerForSingleValueEvent(new ValueEventListener() {
 

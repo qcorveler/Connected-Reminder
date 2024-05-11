@@ -2,6 +2,8 @@ package com.example.testpensebeteapi22;
 
 import android.graphics.Color;
 
+import com.google.android.gms.common.util.ScopeUtil;
+
 /** <p> La classe Event permet de stocker les information d'un évènement envoyé par l'aidant </p>
  *  <p> Quand un évènement arrive à terme, une confirmation est demandée à l'aidé pour savoir si l'évènement à été effectué ou non </p>
  *
@@ -193,5 +195,8 @@ public class Event extends InformationElement implements Comparable<Event>{
     @Override
     public int compareTo(Event o) {
         return this.date.compareTo(o.date);
+    }
+    public String toString(){
+        return title + " " + subtitle + " " + informations + " " + date.toString() + " " + iconId + " " + color;
     }
 }
