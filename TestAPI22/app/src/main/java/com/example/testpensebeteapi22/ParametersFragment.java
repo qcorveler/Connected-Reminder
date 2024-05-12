@@ -12,6 +12,7 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -48,6 +49,7 @@ public class ParametersFragment extends Fragment {
         police_size = rootView.findViewById(R.id.police);
         save = rootView.findViewById(R.id.add);
 
+        setParameters(); // récupère les paramètres de la base de données s'ils ont déjà été enregistrés
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,5 +98,48 @@ public class ParametersFragment extends Fragment {
             io.printStackTrace();
             return null;
         }
+    }
+
+    private void setParameters() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance("https://pense-bete-9293d-default-rtdb.europe-west1.firebasedatabase.app");
+        DatabaseReference myRef = database.getReference("aidés").child(readConfig()).child("parameters");
+        myRef.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Parameters parameters = snapshot.getValue(Parameters.class);
+                System.out.println(parameters);
+                if(parameters !=null ){
+                    isPastAccessible.setChecked(parameters.isPastAccessible());
+                    System.out.println(parameters.isHourVisible());
+                    notifications.setChecked(parameters.isNotifications());
+                    sounds.setChecked(parameters.isSounds());
+                    isHourVisible.setChecked(parameters.isHourVisible());
+                    standby.setChecked(parameters.isStandBy());
+                    if(parameters.getPolice_size().equals("Police : Petite")){
+                        police_size.setSelection(2);
+                    }
+                    else if(parameters.getPolice_size().equals("Police : Moyenne")){
+                        police_size.setSelection(1);
+                    }
+                    else{
+                        police_size.setSelection(0);
+                    }
+                }
+                else{
+                    notifications.setChecked(true);
+                    sounds.setChecked(true);
+                    standby.setChecked(true);
+                    isPastAccessible.setChecked(false);
+                    isHourVisible.setChecked(true);
+                    police_size.setSelection(1);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }

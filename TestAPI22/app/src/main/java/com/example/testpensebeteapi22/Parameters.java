@@ -50,6 +50,14 @@ public class Parameters {
         return police_size;
     }
 
+    public void setPastAccessible(boolean pastAccessible) { // Ne pas supprimer les Setters, la BDD en a besoin
+        isPastAccessible = pastAccessible;
+    }
+
+    public void setHourVisible(boolean hourVisible) {
+        isHourVisible = hourVisible;
+    }
+
     public String toString(){
         return isHourVisible + " " + isPastAccessible + " " + notifications + " " + standBy + " " + sounds + " "  + police_size;
     }

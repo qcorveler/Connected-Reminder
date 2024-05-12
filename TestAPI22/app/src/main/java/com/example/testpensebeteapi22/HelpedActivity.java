@@ -40,7 +40,7 @@ import java.util.Collections;
 import java.util.Locale;
 import java.util.Properties;
 
-/** <p> <b> Cette version est un prototype destiné à être montré à la Soutenance Intermédiaire de notre projet.<br>
+/** <p> <b> Cette version est un prototype destiné à être montré à la Soutenance Finale de notre projet.<br>
  * Le but de ce prototype est de fonctionner sur la version 5.1 d'Android (API 22) (la tablette dont nous disposions pour la soutenance
  * intermédiaire ne supportait que cette version).<br>
  * Pour une version d'android plus récente disposant de plus de fonctionnalité regarder l'application Pense-Bête</b></p>
@@ -999,7 +999,7 @@ public class HelpedActivity extends AppCompatActivity {
                 }
                 else{
                     // s'il n'y a pas de paramètres enregistrés dans la base, on utilise ceux par défaut
-                    parameters1 = new Parameters(false,false,true,true,true,"Moyen");
+                    parameters1 = new Parameters(true,true,false,true,true,"Moyenne");
                     }
                 // Je sais pas si ça fonctionne bien, faudra tester
                 setting_hourIsVisible = parameters1.isHourVisible();

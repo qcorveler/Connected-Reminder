@@ -29,7 +29,7 @@
 
         app:layout_constraintStart_toStartOf="@id/guideline_marge_2"
         app:layout_constraintTop_toTopOf="@id/guideline_marge_4"
-        android:checked="true"/>
+        />
 
     <Switch
         android:id="@+id/standbymode"
@@ -42,7 +42,7 @@
 
         app:layout_constraintStart_toStartOf="@id/guideline_marge_2"
         app:layout_constraintTop_toTopOf="@id/guideline_marge_5"
-        android:checked="true"/>
+        />
 
     <Switch
         android:id="@+id/pastaccessible"
@@ -67,7 +67,7 @@
 
         app:layout_constraintStart_toStartOf="@id/guideline_marge_2"
         app:layout_constraintTop_toTopOf="@id/guideline_marge_7"
-        android:checked="true"/>
+        />
     <Switch
         android:id="@+id/sounds"
         android:layout_width="100dp"
@@ -79,7 +79,7 @@
 
         app:layout_constraintStart_toStartOf="@id/guideline_marge_9"
         app:layout_constraintTop_toTopOf="@id/guideline_marge_4"
-        android:checked="true"/>
+        />
 
     <Spinner
         android:id="@+id/police"
