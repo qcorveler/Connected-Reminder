@@ -93,29 +93,37 @@ public class CalendarFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 database.child("aidés").addListenerForSingleValueEvent(new ValueEventListener() {
+                    String emailEntre = email.getText().toString();
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         // On vérifie si un email correspond
                         for (DataSnapshot childSnapshot : snapshot.getChildren()) {
                             String id = childSnapshot.getKey();
+                            //System.out.println("Id " + id );
+                            //System.out.println("test");
                             String getEmail = snapshot.child(id).child("email").getValue(String.class);
-                            System.out.println(getEmail);
-                            if (getEmail.equals(email.getText().toString())) {
+                            //System.out.println("Email :" + getEmail);
+                            //System.out.println("Email entré " + email.getText().toString());
+                            if (getEmail.equals(emailEntre)) {
                                 String id_helper = GlobalData.id;
-                                System.out.println("Trouvé");
+                                //System.out.println("Trouvé");
                                 database.child("aidants").child(id_helper).addListenerForSingleValueEvent(new ValueEventListener() {
 
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                                         List l = new ArrayList();
+                                        //System.out.println("Liste créée");
                                         if (snapshot.exists()) {
                                             // Si la liste existe déjà, récupérez-la d'abord
                                             l = snapshot.child("list").getValue(new GenericTypeIndicator<List<String>>() {
                                             });
                                             if (l == null) {
                                                 l = new ArrayList<>();
+                                                System.out.println("c'était null");
                                             }
                                         }
+                                        //System.out.println();
+                                        //System.out.println("Avant ajout : ID " + id);
                                         l.add(id);
                                         database.child("aidants").child(id_helper).child("list").setValue(l);
                                         Toast.makeText(rootView.getContext(), "Utilisateur ajouté !", Toast.LENGTH_LONG).show();
@@ -174,7 +182,6 @@ public class CalendarFragment extends Fragment {
 
     public void listeAides() {
         DatabaseReference database = FirebaseDatabase.getInstance("https://pense-bete-9293d-default-rtdb.europe-west1.firebasedatabase.app").getReference();
-        //String id_helper = readConfig();
         String id_helper = GlobalData.id;
         database.child("aidants").child(id_helper).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -186,15 +193,17 @@ public class CalendarFragment extends Fragment {
                     if (l == null) {
                         l = new ArrayList<>();
                     } else {
-                        System.out.println(l.toString());
+                        System.out.println(l.toString() + " premier affichage");
                         CalendarFragment.this.setAidesId(l);
                     }
                 }
                 //ArrayList<String> noms = CalendarFragment.this.listeNomsAides(CalendarFragment.this.getAidesId());
                 //CalendarFragment.this.setAidesNoms(noms);
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, CalendarFragment.this.getAidesId());
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                helped_spinner.setAdapter(adapter);
+                if(l.size() > 0) {
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, CalendarFragment.this.getAidesId());
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    helped_spinner.setAdapter(adapter);
+                }
             }
 
             @Override

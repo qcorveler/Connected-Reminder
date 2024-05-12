@@ -12,7 +12,7 @@
         android:id="@+id/helper_fragment_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Planning de Papa"
+        android:text=""
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="23sp"

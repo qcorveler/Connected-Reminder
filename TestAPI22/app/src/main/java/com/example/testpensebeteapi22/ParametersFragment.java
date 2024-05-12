@@ -52,7 +52,7 @@ public class ParametersFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FirebaseDatabase database = FirebaseDatabase.getInstance("https://pense-bete-9293d-default-rtdb.europe-west1.firebasedatabase.app");
-                DatabaseReference myRef = database.getReference("aidés").child(GlobalData.id).child("parameters");
+                DatabaseReference myRef = database.getReference("aidés").child(readConfig()).child("parameters");
                 Parameters p = new Parameters(notifications.isChecked(), standby.isChecked(), isPastAccessible.isChecked(), isHourVisible.isChecked(), sounds.isChecked(), police_size.getSelectedItem().toString());
                 Toast.makeText(rootView.getContext(), "Paramètres sauvegardés", Toast.LENGTH_LONG).show();
                 myRef.setValue(p);

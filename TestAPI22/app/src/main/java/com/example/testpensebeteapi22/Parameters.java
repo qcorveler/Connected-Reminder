@@ -49,4 +49,8 @@ public class Parameters {
     public String getPolice_size() {
         return police_size;
     }
+
+    public String toString(){
+        return isHourVisible + " " + isPastAccessible + " " + notifications + " " + standBy + " " + sounds + " "  + police_size;
+    }
 }
