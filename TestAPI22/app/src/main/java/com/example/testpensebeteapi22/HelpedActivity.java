@@ -262,6 +262,8 @@ public class HelpedActivity extends AppCompatActivity {
 
          this.banners_list.add(new Banner(1, "C'est l'anniversaire d'Annick !", "BTD", "255;235;59", "N'oublie pas de fêter l'anniversaire d'Annick aujourd'hui, voici son numéro si tu veux l'appeler : 07 83 73 84 50", date3, 72));
          **/
+        //endregion
+
         String id = GlobalData.id; // id utilisateur
         DatabaseReference database = FirebaseDatabase.getInstance("https://pense-bete-9293d-default-rtdb.europe-west1.firebasedatabase.app").getReference();
         DatabaseReference helpedRef = database.child("aidés").child(id).child("events");
@@ -292,7 +294,7 @@ public class HelpedActivity extends AppCompatActivity {
         System.out.println("Events list :" + events_list.toString());
 
 
-        //endregion
+
 //            this.events_list.clear();
 
         sortEventList();
@@ -943,15 +945,10 @@ public class HelpedActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 // Récupère tous les attributs d'un event dans la base de données et en crée un puis l'ajoute à la liste des events
-                System.out.println(snapshot.toString());
-                System.out.println("Children" + snapshot.getChildren().toString());
                 String title = snapshot.child("title").getValue(String.class);
-                System.out.println(title);
                 String subtitle = snapshot.child("subtitle").getValue(String.class);
                 String informations = snapshot.child("informations").getValue(String.class);
-                System.out.println("Info " + informations);
                 String jour = snapshot.child("jour").getValue(String.class);
-                System.out.println("Jour" + jour);
                 String annee = snapshot.child("annee").getValue(String.class);
                 String mois = snapshot.child("mois").getValue(String.class);
                 String heure = snapshot.child("heure").getValue(String.class);
@@ -960,12 +957,18 @@ public class HelpedActivity extends AppCompatActivity {
                 String type = snapshot.child("type").getValue(String.class);
                 Integer id = snapshot.child("id_event").getValue(Integer.class);
                 Integer icone = snapshot.child("iconId").getValue(Integer.class);
-                System.out.println(icone);
                 Date date = DateAuBonFormat(annee, mois, jour, heure, minute);
-                System.out.println(date);
                 Event e = new Event(id, title, subtitle, type, couleur, informations, date, 10, icone);
-                System.out.println(e.toString());
                 events_list.add(e);
+
+                System.out.println(snapshot.toString());
+                System.out.println("Children" + snapshot.getChildren().toString());
+                System.out.println(title);
+                System.out.println("Info " + informations);
+                System.out.println("Jour" + jour);
+                System.out.println(icone);
+                System.out.println(date);
+                System.out.println(e.toString());
                 System.out.println(events_list.toString());
             }
 

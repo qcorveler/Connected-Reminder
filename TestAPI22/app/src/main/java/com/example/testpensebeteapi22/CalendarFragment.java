@@ -10,6 +10,7 @@ import android.graphics.Color;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -32,6 +33,7 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import org.checkerframework.checker.units.qual.A;
+import org.threeten.bp.LocalDateTime;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -46,6 +48,7 @@ public class CalendarFragment extends Fragment {
 
     CalendarView simpleCalendarView;
     private Spinner helped_spinner;
+    private String selected_helped; // Id de la personne aidée sélectionnée par le spinner
     private Button new_helped;
 
     private TextView title;
@@ -76,11 +79,11 @@ public class CalendarFragment extends Fragment {
         helped_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedValue = parent.getItemAtPosition(position).toString();
-                writeConfig(selectedValue);
-                nomPersonne(selectedValue);
+                selected_helped = parent.getItemAtPosition(position).toString();
+                writeConfig(selected_helped);
+                nomPersonne(selected_helped);
                 // on sauvegarde l'id de la personne séléctionnée
-                Toast.makeText(getContext(), selectedValue + " Séléctionné", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), selected_helped + " Séléctionné", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -152,12 +155,36 @@ public class CalendarFragment extends Fragment {
         simpleCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+                // TODO → afficher l'interface de la personne aidée correspondant à la date
+                Date date = new Date();
+                date = new Date(date.getDate().withMonth(month+1).withDayOfMonth(dayOfMonth).withYear(year));
+                openHelpedViewFragment(date, selected_helped);
+
+
                 // display the selected date by using a toast
-                Toast.makeText(rootView.getContext(), dayOfMonth + "/" + (month + 1) + "/" + year, Toast.LENGTH_LONG).show();
+                //Toast.makeText(rootView.getContext(), dayOfMonth + "/" + (month + 1) + "/" + year, Toast.LENGTH_LONG).show();
             }
         });
         return rootView;
     }
+
+    private void openHelpedViewFragment(Date date, String selected_helped) {
+        // Créer une instance du nouveau fragment
+        HelpedViewFragment newFragment = new HelpedViewFragment(date, selected_helped, this.getContext());
+
+        // Commencer une transaction
+        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+
+        // Remplacer le contenu actuel par le nouveau fragment
+        transaction.replace(R.id.frameLayout, newFragment);
+
+        // Ajouter la transaction à la pile arrière
+        transaction.addToBackStack(null);
+
+        // Valider la transaction
+        transaction.commit();
+    }
+
 
     private String readConfig() {
         // Obtenir le chemin du répertoire de stockage interne de l'application
