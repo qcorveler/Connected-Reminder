@@ -61,10 +61,6 @@ public class AddFragment extends Fragment {
         hour = rootView.findViewById(R.id.heure);
         date = rootView.findViewById(R.id.date);
         type = rootView.findViewById(R.id.type);
-        /**HashMap<String, Integer> icones = iconesEvents();
-        HashMap<String, String> couleurs = couleursEvents();
-        System.out.println("Icones : " + icones.toString());
-        System.out.println("Couleurs : " + couleurs.toString()); **/
         add.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
