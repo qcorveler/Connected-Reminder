@@ -27,7 +27,7 @@
 
     <string-array name="event_types">
         <item>RDV</item>
-        <item>Medicament</item>
+        <item>Medicaments</item>
         <item>Anniversaire</item>
         <item>Voeux</item>
         <item>Autres</item>
