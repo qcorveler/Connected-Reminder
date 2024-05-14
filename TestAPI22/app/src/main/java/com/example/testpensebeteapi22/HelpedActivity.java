@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -161,6 +162,7 @@ public class HelpedActivity extends AppCompatActivity {
     private Thread backgroundHour;
     private Thread backgroundStandby;
     private Thread backgroundPastEvents;
+    private Thread backgroundNewEvents;
 
     /**
      * Bouton de navigation des pense-bêtes vers la droite (le futur)
@@ -186,6 +188,9 @@ public class HelpedActivity extends AppCompatActivity {
     private static final int STANDBY_LIMIT = 120;
     private boolean isInStandby;
     private Parameters parameters;
+
+    /** Gestionnaire de son */
+    private MediaPlayer mediaPlayer;
 
 //endregion
 
@@ -487,6 +492,8 @@ public class HelpedActivity extends AppCompatActivity {
 
         //endregion
 
+        // Gestion du MediaPlayer
+        this.mediaPlayer = MediaPlayer.create(this.getApplicationContext(), R.raw.sonnerie_nouvel_event);
     }
 
     @Override
@@ -494,6 +501,24 @@ public class HelpedActivity extends AppCompatActivity {
         super.onStart();
 
         // TODO → AJOUTER UN THREAD POUR LA MAJ DE LA BASE DE DONNEE SUR L'APPLICATION
+        backgroundNewEvents = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                DatabaseReference database = FirebaseDatabase.getInstance("https://pense-bete-9293d-default-rtdb.europe-west1.firebasedatabase.app").getReference();
+                DatabaseReference helpedRef = database.child("aidés").child(GlobalData.id).child("events");
+                helpedRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+        }, "backgroundNewEvents");
 
         // Thread gérant le compteur de veille
         backgroundStandby = new Thread(new Runnable() {
@@ -503,6 +528,7 @@ public class HelpedActivity extends AppCompatActivity {
                     while (!isInStandby) {
 
                         standby_counter++;
+                        System.out.println(standby_counter);
 
                         if (standby_counter > STANDBY_LIMIT) {
                             runOnUiThread(() -> standby()); // COMPREHENSION : Runnable anonyme remplacé par une lambda expression
@@ -554,13 +580,15 @@ public class HelpedActivity extends AppCompatActivity {
 
         findViewById(R.id.fragment_container).setVisibility(View.GONE);
 
+        isInStandby = true; // passage en mode standby
+
         updateEvent_to_confirm();
 
         displayDayEvents();
         displayDayBanner();
         displayButtons();
 
-        isInStandby = true; // passage en mode standby
+        parameters_button.setVisibility(View.GONE);
 
         //Thread gérant les events dont la date arrive à terme (avec demande de confirmation)
         backgroundPastEvents = new Thread(new Runnable() {
@@ -884,12 +912,17 @@ public class HelpedActivity extends AppCompatActivity {
      * <p> Supprime les évènements confirmés et trie la liste dans l'ordre chronologique </p>
      */
     private void updateEvent_to_confirm() {
+        System.out.println("update");
         for (Event e : day_events) {
             if ((e.isConfirmed() || e.isForgotten()) && day_events_to_confirm.contains(e)) {
                 day_events_to_confirm.remove(e);
             }
             if (e.mustBeConfirmed() && !day_events_to_confirm.contains(e)) {
                 day_events_to_confirm.add(e);
+                if(isInStandby){
+                    this.mediaPlayer.setVolume(1, 1);
+                    this.mediaPlayer.start();
+                }
             }
         }
 
