@@ -51,7 +51,6 @@ public class CalendarFragment extends Fragment {
     private Spinner helped_spinner;
     private String selected_helped; // Id de la personne aidée sélectionnée par le spinner
     private Button new_helped;
-
     private TextView title;
     private EditText email;
     ArrayList<String> aidesId;
@@ -93,7 +92,8 @@ public class CalendarFragment extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                helped_spinner.setSelection(0);
+                parent.setEnabled(false);
+                helped_spinner.setVisibility(View.GONE);
             }
         });
 
@@ -120,14 +120,14 @@ public class CalendarFragment extends Fragment {
 
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                        List l = new ArrayList();
-                                        List noms = new ArrayList();
+                                        ArrayList l = new ArrayList();
+                                        ArrayList noms = new ArrayList();
                                         //System.out.println("Liste créée");
                                         if (snapshot.exists()) {
                                             // Si la liste existe déjà, récupérez-la d'abord
-                                            l = snapshot.child("list").getValue(new GenericTypeIndicator<List<String>>() {
+                                            l = snapshot.child("list").getValue(new GenericTypeIndicator<ArrayList<String>>() {
                                             });
-                                            noms = snapshot.child("listNoms").getValue(new GenericTypeIndicator<List<String>>() {
+                                            noms = snapshot.child("listNoms").getValue(new GenericTypeIndicator<ArrayList<String>>() {
                                             });
                                             if (l == null) {
                                                 l = new ArrayList<>();
@@ -141,10 +141,9 @@ public class CalendarFragment extends Fragment {
                                         noms.add(nom);
                                         database.child("aidants").child(id_helper).child("list").setValue(l);
                                         database.child("aidants").child(id_helper).child("listNoms").setValue(noms);
+                                        listeAides();
                                         Toast.makeText(rootView.getContext(), "Utilisateur ajouté !", Toast.LENGTH_LONG).show();
                                     }
-
-
                                     @Override
                                     public void onCancelled(@NonNull DatabaseError error) {
 
@@ -172,8 +171,6 @@ public class CalendarFragment extends Fragment {
                 openHelpedViewFragment(date, selected_helped);
 
 
-                // display the selected date by using a toast
-                //Toast.makeText(rootView.getContext(), dayOfMonth + "/" + (month + 1) + "/" + year, Toast.LENGTH_LONG).show();
             }
         });
         return rootView;
@@ -235,11 +232,10 @@ public class CalendarFragment extends Fragment {
                     if (l == null) {
                         l = new ArrayList<>();
                         l2 = new ArrayList<>();
-                    } else {
-                        System.out.println(l.toString() + " premier affichage");
-                        CalendarFragment.this.setAidesId(l);
-                        CalendarFragment.this.setAidesNoms(l2);
                     }
+                    CalendarFragment.this.setAidesId(l);
+                    CalendarFragment.this.setAidesNoms(l2);
+
                 }
                 if(l.size() > 0) {
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, CalendarFragment.this.getAidesNoms());
@@ -358,7 +354,7 @@ public class CalendarFragment extends Fragment {
                 k = i;
             }
         }
-        System.out.println("LIste Id : " + getAidesId());
+        System.out.println("Liste Id : " + getAidesId());
         return getAidesId().get(k);
     }
 }

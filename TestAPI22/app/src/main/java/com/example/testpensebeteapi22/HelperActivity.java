@@ -51,7 +51,7 @@ public class HelperActivity extends AppCompatActivity  {
                 else if(itemId == R.id.navigaton_parameters){
                     loadFragment(new ParametersFragment(),false);
                 }
-                else{
+                else {
                     AddFragment f = new AddFragment();
                     loadFragment(f,false);
                 }
