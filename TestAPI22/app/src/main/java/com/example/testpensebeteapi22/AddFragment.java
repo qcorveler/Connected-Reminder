@@ -40,6 +40,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AddFragment extends Fragment {
     EditText title;
@@ -130,30 +132,35 @@ public class AddFragment extends Fragment {
 
     private void addEvent(DatabaseReference eventsRef, int maxId) {
         // Ajouter l'événement à la node "events" avec l'ID max
-        //Date dateEvent = DateAuBonFormat(date.getText().toString(), hour.getText().toString());
-        String typeString = type.getSelectedItem().toString();
-        ArrayList<String[]> d = DateSplit(date.getText().toString(), hour.getText().toString());
-        HashMap<String, Integer> icones = iconesEvents();
-        HashMap<String, String> couleurs = couleursEvents();
-        HashMap<String, Integer> ranges = rangeEvents();
-        System.out.println(typeString);
-        Integer icone = icones.containsKey(typeString) ? icones.get(typeString) : Integer.valueOf(18);
-        String couleur = couleurs.containsKey(typeString) ? couleurs.get(typeString) : "0;193;200";
-        Integer range = ranges.containsKey(typeString) ? ranges.get(typeString) : Integer.valueOf(60);
-        // TODO dateEvent fait crash l'application si la date ou l'heure n'est pas renseignée ou pas dans le bon format
-        Event e = new Event(maxId, title.getText().toString(), subtitle.getText().toString(), typeString, couleur, informations.getText().toString(), null, range, icone);
-        eventsRef.child(String.valueOf(maxId)).setValue(e);
-        eventsRef.child(String.valueOf(maxId)).child("annee").setValue(d.get(0)[2]);
-        eventsRef.child(String.valueOf(maxId)).child("mois").setValue(d.get(0)[1]);
-        eventsRef.child(String.valueOf(maxId)).child("jour").setValue(d.get(0)[0]);
-        eventsRef.child(String.valueOf(maxId)).child("heure").setValue(d.get(1)[0]);
-        eventsRef.child(String.valueOf(maxId)).child("minute").setValue(d.get(1)[1]);
-        title.setText("");
-        subtitle.setText("");
-        informations.setText("");
-        date.setText("");
-        hour.setText("");
-
+        System.out.println("Date" + date.getText().toString());
+        System.out.println("Heure" + hour.getText().toString());
+        if(DateEstAuBonFormat(date.getText().toString(),hour.getText().toString())) {
+            String typeString = type.getSelectedItem().toString();
+            ArrayList<String[]> d = DateSplit(date.getText().toString(), hour.getText().toString());
+            HashMap<String, Integer> icones = iconesEvents();
+            HashMap<String, String> couleurs = couleursEvents();
+            HashMap<String, Integer> ranges = rangeEvents();
+            System.out.println(typeString);
+            Integer icone = icones.containsKey(typeString) ? icones.get(typeString) : Integer.valueOf(18);
+            String couleur = couleurs.containsKey(typeString) ? couleurs.get(typeString) : "0;193;200";
+            Integer range = ranges.containsKey(typeString) ? ranges.get(typeString) : Integer.valueOf(60);
+            // TODO dateEvent fait crash l'application si la date ou l'heure n'est pas renseignée ou pas dans le bon format
+            Event e = new Event(maxId, title.getText().toString(), subtitle.getText().toString(), typeString, couleur, informations.getText().toString(), null, range, icone);
+            eventsRef.child(String.valueOf(maxId)).setValue(e);
+            eventsRef.child(String.valueOf(maxId)).child("annee").setValue(d.get(0)[2]);
+            eventsRef.child(String.valueOf(maxId)).child("mois").setValue(d.get(0)[1]);
+            eventsRef.child(String.valueOf(maxId)).child("jour").setValue(d.get(0)[0]);
+            eventsRef.child(String.valueOf(maxId)).child("heure").setValue(d.get(1)[0]);
+            eventsRef.child(String.valueOf(maxId)).child("minute").setValue(d.get(1)[1]);
+            title.setText("");
+            subtitle.setText("");
+            informations.setText("");
+            date.setText("");
+            hour.setText("");
+        }
+        else {
+            Toast.makeText(getContext(), "Veuillez entrer une date et une heure valides", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public interface MaxIdCallback {
@@ -161,18 +168,15 @@ public class AddFragment extends Fragment {
     }
 
 
-    public Date DateAuBonFormat(String date, String heure){
-        String[] e = date.split("/");
-        String[] h = heure.split(":");
+    public boolean DateEstAuBonFormat(String date, String heure){
+        String regexDate = "\\d{2}/\\d{2}/\\d{4}";
+        Pattern patternDate = Pattern.compile(regexDate);
+        Matcher matcherDate = patternDate.matcher(date);
+        String regexHeure = "\\d{2}:\\d{2}";
+        Pattern patternHeure = Pattern.compile(regexHeure);
+        Matcher matcherHeure = patternHeure.matcher(heure);
 
-        // Construire une chaîne de caractères dans le format ISO 8601
-        String formattedDateTime = String.format(Locale.getDefault(), "%s-%s-%sT%s:%s:00", e[2], e[1], e[0], h[0], h[1]);
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-        LocalDateTime parsedDateTime = LocalDateTime.parse(formattedDateTime, formatter);
-
-        // Retourner la date et l'heure parsées
-        return new Date(parsedDateTime);
+        return matcherHeure.matches() && matcherDate.matches();
     }
 
     public ArrayList<String[]> DateSplit(String date, String heure){

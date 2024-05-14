@@ -140,7 +140,7 @@ public class CalendarFragment extends Fragment {
                                         noms.add(nom);
                                         database.child("aidants").child(id_helper).child("list").setValue(l);
                                         database.child("aidants").child(id_helper).child("listNoms").setValue(noms);
-                                        listeAides();
+                                        //listeAides();
                                         Toast.makeText(rootView.getContext(), "Utilisateur ajouté !", Toast.LENGTH_LONG).show();
                                     }
                                     @Override

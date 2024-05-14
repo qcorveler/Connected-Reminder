@@ -43,6 +43,7 @@ public class HelperActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigation_layout);
         idTest = readConfig();
+        isAbleToSwitch = true;
 
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
         frameLayout = findViewById(R.id.frameLayout);
@@ -143,11 +144,8 @@ public class HelperActivity extends AppCompatActivity  {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ArrayList<String> l = new ArrayList<>();
-                ArrayList<String> l2 = new ArrayList<>();
                 if (snapshot.exists()) {
                     l = snapshot.child("list").getValue(new GenericTypeIndicator<ArrayList<String>>() {
-                    });
-                    l2 = snapshot.child("listNoms").getValue(new GenericTypeIndicator<ArrayList<String>>() {
                     });
 
                     if (l == null || l.size()<1) {
