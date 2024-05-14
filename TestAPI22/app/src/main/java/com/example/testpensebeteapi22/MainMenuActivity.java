@@ -5,14 +5,24 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Properties;
 
 public class MainMenuActivity extends AppCompatActivity {
@@ -77,4 +87,6 @@ public class MainMenuActivity extends AppCompatActivity {
             //Toast.makeText(MainMenuActivity.this, "Erreur lors de l'enregistrement du mode de connexion", Toast.LENGTH_SHORT).show();
         }
     }
+
+
 }

@@ -135,7 +135,6 @@ public class CalendarFragment extends Fragment {
                                                 System.out.println("c'était null");
                                             }
                                         }
-                                        //System.out.println();
                                         //System.out.println("Avant ajout : ID " + id);
                                         l.add(id);
                                         noms.add(nom);

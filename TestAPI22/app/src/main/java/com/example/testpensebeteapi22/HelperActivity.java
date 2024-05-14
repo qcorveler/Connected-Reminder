@@ -16,6 +16,12 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,6 +35,7 @@ public class HelperActivity extends AppCompatActivity  {
     private BottomNavigationView bottomNavigationView;
     private FrameLayout frameLayout;
     public String idTest;
+    boolean isAbleToSwitch;
 
 
     @Override
@@ -44,16 +51,20 @@ public class HelperActivity extends AppCompatActivity  {
             public boolean onNavigationItemSelected(@NonNull MenuItem menu){
 
                 int itemId = menu.getItemId();
+                listeAides();
+                if(isAbleToSwitch) {
 
-                if(itemId == R.id.navigaton_home){
-                    loadFragment(new CalendarFragment(),false);
+                    if (itemId == R.id.navigaton_home) {
+                        loadFragment(new CalendarFragment(), false);
+                    } else if (itemId == R.id.navigaton_parameters) {
+                        loadFragment(new ParametersFragment(), false);
+                    } else {
+                        AddFragment f = new AddFragment();
+                        loadFragment(f, false);
+                    }
                 }
-                else if(itemId == R.id.navigaton_parameters){
-                    loadFragment(new ParametersFragment(),false);
-                }
-                else {
-                    AddFragment f = new AddFragment();
-                    loadFragment(f,false);
+                else{
+                    Toast.makeText(getApplicationContext(), "Ajoutez un utilisateur via un email", Toast.LENGTH_SHORT).show();
                 }
                 return true;
             }
@@ -124,6 +135,35 @@ public class HelperActivity extends AppCompatActivity  {
             io.printStackTrace();
             return null;
         }
+    }
+    public void listeAides() {
+        DatabaseReference database = FirebaseDatabase.getInstance("https://pense-bete-9293d-default-rtdb.europe-west1.firebasedatabase.app").getReference();
+        String id_helper = GlobalData.id;
+        database.child("aidants").child(id_helper).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<String> l = new ArrayList<>();
+                ArrayList<String> l2 = new ArrayList<>();
+                if (snapshot.exists()) {
+                    l = snapshot.child("list").getValue(new GenericTypeIndicator<ArrayList<String>>() {
+                    });
+                    l2 = snapshot.child("listNoms").getValue(new GenericTypeIndicator<ArrayList<String>>() {
+                    });
+
+                    if (l == null || l.size()<1) {
+                        isAbleToSwitch = false;
+                    }
+                    else{
+                        isAbleToSwitch = true;
+                    }
+                }
+
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }
 
