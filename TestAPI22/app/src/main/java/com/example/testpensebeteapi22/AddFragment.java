@@ -139,11 +139,13 @@ public class AddFragment extends Fragment {
         ArrayList<String[]> d = DateSplit(date.getText().toString(), hour.getText().toString());
         HashMap<String, Integer> icones = iconesEvents();
         HashMap<String, String> couleurs = couleursEvents();
+        HashMap<String, Integer> ranges = rangeEvents();
         System.out.println(typeString);
-        Integer icone = icones.containsKey(typeString) ? icones.get(typeString) : Integer.valueOf(1);
-        String couleur = couleurs.containsKey(typeString) ? couleurs.get(typeString) : "0;193;0";
+        Integer icone = icones.containsKey(typeString) ? icones.get(typeString) : Integer.valueOf(18);
+        String couleur = couleurs.containsKey(typeString) ? couleurs.get(typeString) : "0;193;200";
+        Integer range = ranges.containsKey(typeString) ? ranges.get(typeString) : Integer.valueOf(60);
         // TODO dateEvent fait crash l'application si la date ou l'heure n'est pas renseignée ou pas dans le bon format
-        Event e = new Event(maxId, title.getText().toString(), subtitle.getText().toString(), typeString, couleur, informations.getText().toString(), null, 50, icone);
+        Event e = new Event(maxId, title.getText().toString(), subtitle.getText().toString(), typeString, couleur, informations.getText().toString(), null, range, icone);
         eventsRef.child(String.valueOf(maxId)).setValue(e);
         eventsRef.child(String.valueOf(maxId)).child("annee").setValue(d.get(0)[2]);
         eventsRef.child(String.valueOf(maxId)).child("mois").setValue(d.get(0)[1]);
@@ -205,6 +207,17 @@ public class AddFragment extends Fragment {
         icones.put("Autres", 62);
         return icones;
     }
+
+    public HashMap<String, Integer> rangeEvents(){
+        HashMap<String,Integer> ranges = new HashMap<>();
+        ranges.put("Medicaments", 15);
+        ranges.put("Anniversaire", 0);
+        ranges.put("Voeux",0);
+        ranges.put("RDV", 60);
+        ranges.put("Autres", 60);
+        return ranges;
+    }
+
     private String readConfig() {
         // Obtenir le chemin du répertoire de stockage interne de l'application
         ContextWrapper contextWrapper = new ContextWrapper(getActivity());
@@ -225,6 +238,7 @@ public class AddFragment extends Fragment {
             return null;
         }
     }
+
 
 
 

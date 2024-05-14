@@ -56,13 +56,13 @@
             android:inputType="datetime"
             android:textColorHint="@color/black"
             />
-        <EditText
+        <!--<EditText
             android:layout_height="70dp"
             android:layout_width="match_parent"
             android:hint="@string/add_duration_input"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:textColorHint="@color/black"
-            />
+            />-->
         <!--
         <EditText
             android:layout_height="70dp"
