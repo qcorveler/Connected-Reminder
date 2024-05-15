@@ -51,7 +51,6 @@ public class AddFragment extends Fragment {
     EditText hour;
     Spinner type;
     Button add;
-
     // Fragment permettant d'ajouter un pense bête à la base de données
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -114,7 +113,6 @@ public class AddFragment extends Fragment {
                         }
                     }
                 }
-
                 // Appel du callback avec la valeur maximale
                 callback.onMaxIdFound(String.valueOf(++max));
 
