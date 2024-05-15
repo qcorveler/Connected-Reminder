@@ -100,6 +100,7 @@ public class AddFragment extends Fragment {
     }
 
     private void findMaxIdAndAddEvent(DatabaseReference eventsRef, MaxIdCallback callback) {
+        //Cherche l'id max des events enregistrés en attendant la réponse (car asynchrone)
         eventsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -132,8 +133,6 @@ public class AddFragment extends Fragment {
 
     private void addEvent(DatabaseReference eventsRef, int maxId) {
         // Ajouter l'événement à la node "events" avec l'ID max
-        System.out.println("Date" + date.getText().toString());
-        System.out.println("Heure" + hour.getText().toString());
         if(DateEstAuBonFormat(date.getText().toString(),hour.getText().toString())) {
             String typeString = type.getSelectedItem().toString();
             ArrayList<String[]> d = DateSplit(date.getText().toString(), hour.getText().toString());
@@ -144,7 +143,6 @@ public class AddFragment extends Fragment {
             Integer icone = icones.containsKey(typeString) ? icones.get(typeString) : Integer.valueOf(18);
             String couleur = couleurs.containsKey(typeString) ? couleurs.get(typeString) : "0;193;200";
             Integer range = ranges.containsKey(typeString) ? ranges.get(typeString) : Integer.valueOf(60);
-            // TODO dateEvent fait crash l'application si la date ou l'heure n'est pas renseignée ou pas dans le bon format
             Event e = new Event(maxId, title.getText().toString(), subtitle.getText().toString(), typeString, couleur, informations.getText().toString(), null, range, icone);
             eventsRef.child(String.valueOf(maxId)).setValue(e);
             eventsRef.child(String.valueOf(maxId)).child("annee").setValue(d.get(0)[2]);
@@ -238,8 +236,4 @@ public class AddFragment extends Fragment {
             return null;
         }
     }
-
-
-
-
 }

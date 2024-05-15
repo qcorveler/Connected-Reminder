@@ -67,26 +67,25 @@ public class CalendarFragment extends Fragment {
         helped_spinner = rootView.findViewById(R.id.spinner_helped);
         email = rootView.findViewById(R.id.email_edit_text);
 
-        //super.onCreate(savedInstanceState);
         simpleCalendarView = (CalendarView) rootView.findViewById(R.id.simpleCalendarView); // get the reference of CalendarView
         simpleCalendarView.setUnfocusedMonthDateColor(Color.BLUE); // set the yellow color for the dates of an unfocused month
         simpleCalendarView.setFocusedMonthDateColor(Color.RED); // set the red color for the dates of focused month
         simpleCalendarView.setSelectedWeekBackgroundColor(Color.RED); // red color for the selected week's background
         simpleCalendarView.setWeekSeparatorLineColor(Color.GREEN); // green color for the week separator line **/
-        // perform setOnDateChangeListener event on CalendarView
+
         listeAides();
 
         helped_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Enregistre l'id de la personne séléctionnée dans le spinner et fait les mises à jours nécessaires
                 selected_helped = CalendarFragment.this.getAidesNoms().get(position);
                 System.out.println(selected_helped);
                 String id_selected = getIdSelectionne(selected_helped);
                 System.out.println(id_selected);
                 writeConfig(id_selected);
                 nomPersonne(id_selected);
-                // on sauvegarde l'id de la personne séléctionnée
-                Toast.makeText(getContext(), selected_helped + " Séléctionné", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), selected_helped + " Séléctionné", Toast.LENGTH_SHORT).show();
                 selected_helped = id_selected;
             }
 
@@ -192,29 +191,8 @@ public class CalendarFragment extends Fragment {
         transaction.commit();
     }
 
-
-    private String readConfig() {
-        // Obtenir le chemin du répertoire de stockage interne de l'application
-        ContextWrapper contextWrapper = new ContextWrapper(getActivity());
-        File directory = contextWrapper.getDir("config", Context.MODE_PRIVATE);
-        File configFile = new File(directory, "config.properties");
-
-        // Créer un objet Properties
-        Properties prop = new Properties();
-
-        try (FileInputStream input = new FileInputStream(configFile)) {
-            // Charger les propriétés à partir du fichier
-            prop.load(input);
-
-            // Récupérer l'identifiant à partir des propriétés
-            return prop.getProperty("id");
-        } catch (IOException io) {
-            io.printStackTrace();
-            return null;
-        }
-    }
-
     public void listeAides() {
+        // Affiche la liste des personnes aidées par l'aidant dans le spinner
         DatabaseReference database = FirebaseDatabase.getInstance("https://pense-bete-9293d-default-rtdb.europe-west1.firebasedatabase.app").getReference();
         String id_helper = GlobalData.id;
         database.child("aidants").child(id_helper).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -257,35 +235,6 @@ public class CalendarFragment extends Fragment {
         return aidesId;
     }
 
-    /**public void listesNomAides(ArrayList<String> aidesId1) {
-        DatabaseReference database = FirebaseDatabase.getInstance("https://pense-bete-9293d-default-rtdb.europe-west1.firebasedatabase.app").getReference();
-        System.out.println("Liste id " + aidesId);
-        database.child("aidés").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ArrayList<String> aidesNoms = new ArrayList<>();
-                System.out.println("OK");
-                for(int i = 0 ; i< aidesId1.size() ; i++){
-                    System.out.println(aidesId1.get(i));
-                    for(DataSnapshot d : snapshot.getChildren()){
-                        if(d.getKey().equals(aidesId1.get(i))){
-                            String nom = snapshot.child(d.getKey()).child("name").getValue(String.class);
-                            System.out.println(nom);
-                            aidesNoms.add(nom);
-                        }
-                    }
-                }
-                System.out.println("Aides noms : " +aidesNoms.toString());
-                CalendarFragment.this.setAidesNoms(aidesNoms);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    } **/
-
     public ArrayList<String> getAidesNoms() {
         return aidesNoms;
     }
@@ -296,6 +245,7 @@ public class CalendarFragment extends Fragment {
 
 
     private void writeConfig(String id){
+        //Ecrit dans un fichier config l'id de la personne aidée que l'on a séléctionné
         // Créer un objet Properties
         Properties prop = new Properties();
         // Définir les propriétés
@@ -325,6 +275,7 @@ public class CalendarFragment extends Fragment {
     }
 
     public void nomPersonne(String idSelectionne){
+        // Cherche le nom de la personne séléctionnée pour afficher le titre
         DatabaseReference database = FirebaseDatabase.getInstance("https://pense-bete-9293d-default-rtdb.europe-west1.firebasedatabase.app").getReference();
         database.child("aidés").addListenerForSingleValueEvent(new ValueEventListener() {
             @SuppressLint("SetTextI18n")
@@ -346,6 +297,7 @@ public class CalendarFragment extends Fragment {
         });
     }
     public String getIdSelectionne(String nom){
+        // Cherche l'id associé au nom
         ArrayList<String> noms = getAidesNoms();
         int k = 0;
         for(int i=0; i<noms.size() ; i++){

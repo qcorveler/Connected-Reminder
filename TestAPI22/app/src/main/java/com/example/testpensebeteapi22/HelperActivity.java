@@ -87,35 +87,6 @@ public class HelperActivity extends AppCompatActivity  {
 
     }
 
-    private void writeConfig(String id){
-        // Créer un objet Properties
-        Properties prop = new Properties();
-        // Définir les propriétés
-        prop.setProperty("id", id);
-
-        // Obtenir le chemin du répertoire de stockage interne de l'application
-        ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
-        File directory = contextWrapper.getDir("config", Context.MODE_PRIVATE);
-        File configFile = new File(directory, "config.properties");
-
-        if (!configFile.exists()) {
-            try {
-                configFile.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        try (FileOutputStream output = new FileOutputStream(configFile)) {
-            // Enregistrer les propriétés dans le fichier
-            prop.store(output, "Fichier de configuration");
-            //Toast.makeText(getApplicationContext(), "Id enregistré", Toast.LENGTH_SHORT).show();
-        } catch (IOException io) {
-            io.printStackTrace();
-           // Toast.makeText(getApplicationContext(), "Erreur lors de l'enregistrement du mode de connexion", Toast.LENGTH_SHORT).show();
-        }
-    }
-
     private String readConfig() {
         // Obtenir le chemin du répertoire de stockage interne de l'application
         ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
@@ -130,7 +101,6 @@ public class HelperActivity extends AppCompatActivity  {
             prop.load(input);
 
             // Récupérer l'identifiant à partir des propriétés
-            System.out.println(prop.getProperty("idSelectionne"));
             return prop.getProperty("id");
         } catch (IOException io) {
             io.printStackTrace();
