@@ -118,7 +118,6 @@ public class CalendarFragment extends Fragment {
                                 String id_helper = GlobalData.id;
                                 //System.out.println("Trouvé");
                                 database.child("aidants").child(id_helper).addListenerForSingleValueEvent(new ValueEventListener() {
-
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                                         ArrayList l = new ArrayList();
@@ -141,7 +140,7 @@ public class CalendarFragment extends Fragment {
                                         noms.add(nom);
                                         database.child("aidants").child(id_helper).child("list").setValue(l);
                                         database.child("aidants").child(id_helper).child("listNoms").setValue(noms);
-                                        //listeAides();
+                                        listeAides();
                                         Toast.makeText(rootView.getContext(), "Utilisateur ajouté !", Toast.LENGTH_LONG).show();
                                     }
                                     @Override

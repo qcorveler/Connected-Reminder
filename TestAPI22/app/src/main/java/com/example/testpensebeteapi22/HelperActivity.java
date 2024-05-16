@@ -43,8 +43,8 @@ public class HelperActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigation_layout);
         idTest = readConfig();
-        isAbleToSwitch = true;
-
+        isAbleToSwitch = false;
+        listeAides();
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
         frameLayout = findViewById(R.id.frameLayout);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
@@ -54,7 +54,6 @@ public class HelperActivity extends AppCompatActivity  {
                 int itemId = menu.getItemId();
                 listeAides();
                 if(isAbleToSwitch) {
-
                     if (itemId == R.id.navigaton_home) {
                         loadFragment(new CalendarFragment(), false);
                     } else if (itemId == R.id.navigaton_parameters) {
@@ -117,13 +116,14 @@ public class HelperActivity extends AppCompatActivity  {
                 if (snapshot.exists()) {
                     l = snapshot.child("list").getValue(new GenericTypeIndicator<ArrayList<String>>() {
                     });
-
-                    if (l == null || l.size()<1) {
-                        isAbleToSwitch = false;
-                    }
-                    else{
-                        isAbleToSwitch = true;
-                    }
+                }
+                if (l == null || l.size()<1) {
+                    isAbleToSwitch = false;
+                    System.out.println("Passé à false");
+                }
+                else{
+                    System.out.println("Passé à true");
+                    isAbleToSwitch = true;
                 }
 
             }
