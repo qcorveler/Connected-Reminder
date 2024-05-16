@@ -93,10 +93,14 @@ public class HelpedViewFragment extends Fragment {
 
     private ImageButton back_button;
 
-    public HelpedViewFragment(Date date, String selected_helped, Context context){
+    private TextView planning_name;
+    private String name;
+
+    public HelpedViewFragment(Date date, String selected_helped, Context context, String name){
         this.display_date = date;
         this.selected_helped = selected_helped;
         this.context = context;
+        this.name = name;
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -108,6 +112,7 @@ public class HelpedViewFragment extends Fragment {
         text_view_display_day = view_root.findViewById(R.id.date); // récupération des TextView qui contiennent la date et l'heure pour l'affichage
         text_view_display_hour = view_root.findViewById(R.id.hour);
         text_view_display_temporality = view_root.findViewById(R.id.temporality);
+        planning_name = view_root.findViewById(R.id.planning_name);
 
         text_view_display_temporality.setText(display_date.dateContext()); // Affichage de la date et de la temporalité au bon endroit
         text_view_display_day.setText(display_date.getDateFormat1());
@@ -115,6 +120,14 @@ public class HelpedViewFragment extends Fragment {
         text_view_display_day.setTextSize(15);
         text_view_display_hour.setTextSize(30);
         text_view_display_temporality.setTextSize(20);
+
+        day_events_layout = view_root.findViewById(R.id.event_list_layout);
+        day_events_scrollview = view_root.findViewById(R.id.event_list_scrollview);
+
+        day_events_layout.removeAllViews();
+
+        planning_name.setText("Planning de " + name);
+        //day_events_scrollview.removeAllViews();
 
         // Récupération des events de la bonne personne
         String id = selected_helped; // id de la personne aidée sélectionnée
@@ -150,13 +163,7 @@ public class HelpedViewFragment extends Fragment {
         banner_text = view_root.findViewById(R.id.day_banner_text);
         banner_image = view_root.findViewById(R.id.day_banner_imageview);
 
-        day_events_layout = view_root.findViewById(R.id.event_list_layout);
-        day_events_scrollview = view_root.findViewById(R.id.event_list_scrollview);
-
-        System.out.println("day_events avant affichage :" + day_events.toString());
-
-        displayDayEvents(view_root);
-        displayDayBanner(view_root);
+        banner_layout.removeAllViews();
 
         // Gestion du bouton de retour
         back_button = view_root.findViewById(R.id.back_button);
@@ -307,34 +314,36 @@ public class HelpedViewFragment extends Fragment {
             childConstraintSet.applyTo(child);
 
             // Gestion du ClickListener
-            /*child.setOnClickListener(new View.OnClickListener() {
+            child.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) == null) {
-                        //gestion de la veille
-                        standby_counter = 0;
-                        isInStandby = false;
-                        parameters_button.setVisibility(View.GONE);
-
-                        //gestion du fragment à ajouter
-                        EventFragment informations_fragment = new EventFragment(getApplicationContext(), e, setting_Textsize);
-
-                        findViewById(R.id.fragment_container).setVisibility(View.VISIBLE);
-
-                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                        transaction.replace(R.id.fragment_container, informations_fragment);
-
-                        transaction.commit();
-                    }
-
+                    //gestion du fragment à ajouter
+                    openHelpedViewEventFragment(e);
                 }
-            });*/
+            });
 
             //  Ajouter le layout une fois créé en tant qu'enfant de notre layout prévu à cet effet
             day_events_layout.addView(child);
         }
 
+    }
+
+    private void openHelpedViewEventFragment(Event event) {
+        // Créer une instance du nouveau fragment
+        HelpedViewEventFragment newFragment = new HelpedViewEventFragment(context, event);
+
+        // Commencer une transaction
+        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+
+        // Remplacer le contenu actuel par le nouveau fragment
+        transaction.replace(R.id.frameLayout, newFragment);
+
+        // Ajouter la transaction à la pile arrière
+        transaction.addToBackStack(null);
+
+        // Valider la transaction
+        transaction.commit();
     }
 
     public void displayDayBanner(View view_root){

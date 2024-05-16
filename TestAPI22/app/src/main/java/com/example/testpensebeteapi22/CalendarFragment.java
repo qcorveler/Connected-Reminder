@@ -56,6 +56,8 @@ public class CalendarFragment extends Fragment {
     ArrayList<String> aidesId;
     ArrayList<String> aidesNoms;
 
+    private String nom_personne;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
@@ -176,7 +178,7 @@ public class CalendarFragment extends Fragment {
 
     private void openHelpedViewFragment(Date date, String selected_helped) {
         // Créer une instance du nouveau fragment
-        HelpedViewFragment newFragment = new HelpedViewFragment(date, selected_helped, this.getContext());
+        HelpedViewFragment newFragment = new HelpedViewFragment(date, selected_helped, this.getContext(), nom_personne);
 
         // Commencer une transaction
         FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
@@ -286,6 +288,7 @@ public class CalendarFragment extends Fragment {
                     if(key.equals(idSelectionne)){
                         String nom = snapshot.child(key).child("name").getValue(String.class);
                         title.setText("Planning de " + nom);
+                        nom_personne = nom;
                     }
                 }
             }

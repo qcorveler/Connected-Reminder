@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/event_shape"
     android:backgroundTint="@color/white"
-    tools:context=".EventFragment">
+    tools:context=".HelpedViewEventFragment">
 
     <ImageView
         android:id="@+id/event_info_icon"
@@ -15,11 +15,11 @@
         android:layout_height="0dp"
         android:scaleType="fitCenter"
         android:src="@drawable/icone_1"
-        android:layout_marginEnd="25dp"
         app:layout_constraintDimensionRatio="1"
         app:layout_constraintBottom_toBottomOf="@id/bottom_title_guideline"
         app:layout_constraintTop_toTopOf="@id/top_title_guideline"
-        app:layout_constraintStart_toStartOf="@id/start_info_guideline">
+        app:layout_constraintStart_toStartOf="@id/start_info_guideline"
+        app:layout_constraintEnd_toEndOf="@id/start_title_guideline">
     </ImageView>
 
     <LinearLayout
@@ -28,6 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="15dp"
         android:orientation="vertical"
+        android:layout_marginStart="25dp"
         app:layout_constraintStart_toStartOf="@id/start_title_guideline"
         app:layout_constraintTop_toTopOf="@id/top_title_guideline"
         app:layout_constraintBottom_toBottomOf="@id/bottom_title_guideline"
@@ -159,25 +160,6 @@
         app:layout_constraintStart_toStartOf="@id/end_info_guideline"
         app:layout_constraintBottom_toBottomOf="@id/bottom_info_guideline">
 
-        <CheckBox
-            android:id="@+id/event_confirmation_checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/confirmation"
-            android:textSize="30dp"
-            android:textColor="@color/black"
-            android:paddingStart="10dp">
-        </CheckBox>
-
-        <CheckBox
-            android:id="@+id/forgotten_event_checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/forgotten"
-            android:textSize="30dp"
-            android:textColor="@color/black"
-            android:paddingStart="10dp">
-        </CheckBox>
 
         <ImageButton
             android:id="@+id/navigation_back_button"
@@ -192,6 +174,20 @@
             android:contentDescription="navigation pour sortir du fragment"
 
             >
+        </ImageButton>
+
+        <ImageButton
+            android:id="@+id/supp_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:src="@drawable/croix"
+            android:scaleType="fitCenter"
+            android:background="@color/transparent"
+            android:contentDescription="supprimer event">
+
         </ImageButton>
 
     </LinearLayout>
