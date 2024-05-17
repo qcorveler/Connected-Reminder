@@ -38,13 +38,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Locale;
 import java.util.Properties;
 
 /** <p> <b> Cette version est un prototype destiné à être montré à la Soutenance Finale de notre projet.<br>
  * Le but de ce prototype est de fonctionner sur la version 5.1 d'Android (API 22) (la tablette dont nous disposions pour la soutenance
- * intermédiaire ne supportait que cette version).<br>
- * Pour une version d'android plus récente disposant de plus de fonctionnalité regarder l'application Pense-Bête</b></p>
+ * intermédiaire ne supportait que cette version).</b></p>
  * <p> La classe Home décrit la page d'accueil de notre application </p>
  *
  * <p> Le but de la page d'accueil est :</p>
@@ -500,7 +500,6 @@ public class HelpedActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        // TODO → AJOUTER UN THREAD POUR LA MAJ DE LA BASE DE DONNEE SUR L'APPLICATION
         backgroundNewEvents = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -710,6 +709,13 @@ public class HelpedActivity extends AppCompatActivity {
         } else {
             findViewById(R.id.no_pensebete_layout).setVisibility(View.GONE);
         }
+
+        Collections.sort(day_events, new Comparator<Event>() {
+            @Override
+            public int compare(Event o1, Event o2) {
+                return o1.compareTo(o2);
+            }
+        });
 
         // Affichage des events de la liste de jour
         for (Event e : day_events) {
@@ -1049,7 +1055,6 @@ public class HelpedActivity extends AppCompatActivity {
             }
         });
 
-        /* TODO → FAIRE EN SORTE QUE L'APPLICATION SOIT UTILISABLE SUR TELEPHONE (MÊME SI C'EST MOCHE)*/
         /* TODO → SOUNDS */
         /* TODO → POP-UP AU MOMENT DE CLIQUER SUR BACK QUAND ON A PAS CONFIRMÉ L'EVENT */
     }
