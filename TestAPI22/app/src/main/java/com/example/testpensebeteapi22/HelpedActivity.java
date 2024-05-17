@@ -503,21 +503,38 @@ public class HelpedActivity extends AppCompatActivity {
         backgroundNewEvents = new Thread(new Runnable() {
             @Override
             public void run() {
-                DatabaseReference database = FirebaseDatabase.getInstance("https://pense-bete-9293d-default-rtdb.europe-west1.firebasedatabase.app").getReference();
-                DatabaseReference helpedRef = database.child("aidés").child(GlobalData.id).child("events");
-                helpedRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
 
+                while(true) {
+                    DatabaseReference database = FirebaseDatabase.getInstance("https://pense-bete-9293d-default-rtdb.europe-west1.firebasedatabase.app").getReference();
+                    DatabaseReference helpedRef = database.child("aidés").child(GlobalData.id).child("events");
+                    helpedRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            for (DataSnapshot childSnapshot : snapshot.getChildren()) {
+                                String idEvent = childSnapshot.getKey();
+                                if (idEvent != null) {
+                                    eventInDatabase(idEvent);
+                                    System.out.println("Event ajouté");
+                                    events_list.toString();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
+                    try{
+                        Thread.sleep(15000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
                     }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
+                }
             }
         }, "backgroundNewEvents");
+        backgroundNewEvents.start();
 
         // Thread gérant le compteur de veille
         backgroundStandby = new Thread(new Runnable() {
@@ -998,7 +1015,17 @@ public class HelpedActivity extends AppCompatActivity {
                 Integer icone = snapshot.child("iconId").getValue(Integer.class);
                 Date date = DateAuBonFormat(annee, mois, jour, heure, minute);
                 Event e = new Event(id, title, subtitle, type, couleur, informations, date, 10, icone);
-                events_list.add(e);
+
+                boolean contains = false;
+                for(Event e1 : events_list) {
+                    if (e1.equals(e)) {
+                        contains = true;
+                    }
+                }
+                if(!contains){
+                    events_list.add(e);
+                    displayDayEvents();
+                }
 
                 System.out.println(snapshot.toString());
                 System.out.println("Children" + snapshot.getChildren().toString());
