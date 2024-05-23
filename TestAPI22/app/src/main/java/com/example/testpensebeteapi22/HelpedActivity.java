@@ -235,38 +235,8 @@ public class HelpedActivity extends AppCompatActivity {
 
         //region -------------- Récupération des évènements -------------
         //region --- simulation de la récupération des évènements ---
-        /**  Date date4 = new Date(LocalDateTime.parse("2024-01-01T00:00:00"));
-
-         Date date1 = new Date(); // format UTC pour la date et l'heure : LocalDateTime.parse("2023-12-20T15:00:00")
-         date1 = new Date(date1.getDate().withHour(15).withMinute(0));
-         Date date6 = new Date(date1.getDate().withHour(20).withMinute(0));
-         Date date2 = new Date(date1.getDate().withHour(9).withMinute(0));
-
-         date1.nextDay();
-         Date date5 = new Date(date1.getDate().withHour(13).withMinute(0));
-         Date date7 = new Date(date1.getDate().withHour(15).withMinute(0));
-         Date date8 = new Date(date1.getDate().withHour(20).withMinute(30));
-         Date date9 = new Date(date1.getDate().withHour(20).withMinute(0));
-         Date date10 = new Date(date1.getDate().withHour(9).withMinute(0));
-
-         date1.nextDay();
-         Date date3 = new Date(date1.getDate().withHour(12).withMinute(0));
-
-         this.events_list.add(new Event(1, "RDV médical", "Ophtalmologie", "APT", "111;136;255", "Docteur : Dr. Ferrezuelo,                                                                              Adresse : 21 rue du Pléssis 35700, Rennes.                                                 Note : N'oublie pas d'apporter tes lunettes !", date1, 60,10));
-         this.events_list.add(new Event(8, "Médicaments", "Desloratadine DesloratadineDesloratadineDesloratadineDesloratadineDesloratadineDesloratadineDesloratadineDesloratadineDesloratadineDesloratadineDesloratadineDesloratadine", "MDC", "253;82;82", "N'oublie pas de prendre tes médicaments c'est hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra hyper mega super giga tera maxi supra  hyper mega super giga tera maxi supra  important :)", date2, 15, 5));
-         this.events_list.add(new Event(2, "Médicaments", "Desloratadine", "MDC", "253;82;82", "N'oublie pas de prendre tes médicaments c'est important :)", date6, 15, 5));
-
-         this.events_list.add(new Event(3, "Visite médicale", "Vaccin", "APT", "111;136;255", "L'infirmière vient chez toi aujourd'hui. Prépare ton carnet de santé", date5, 30, 12));
-         this.events_list.add(new Event(6, "Chauffage", "Il fait froid", "ORDRE", "0;193;255", "Il va faire particulièrement froid cette nuit, tu peux monter le chauffage dans le garage ", date7,10, 20));
-         this.events_list.add(new Event(7, "Film", "Le Père Noël est une ordure", "ORDRE", "231;8;8", "Le film passe sur la 2 ce soir, si jamais ça t'intéresse", date8,10, 62));
-         this.events_list.add(new Event(8, "Médicaments", "Desloratadine", "MDC", "253;82;82", "N'oublie pas de prendre tes médicaments c'est important :)", date9, 15, 5));
-         this.events_list.add(new Event(2, "Médicaments", "Desloratadine", "MDC", "253;82;82", "N'oublie pas de prendre tes médicaments c'est important :)", date10, 15, 5));
 
 
-         this.events_list.add(new Event(5, "BONNE ANNÉE !!! <3", "Meilleurs Voeux", "POS", "255;235;59", "Gros Bisous de la part de toute la famille :3, on pense à toi", date4, 1,70));
-
-         this.banners_list.add(new Banner(1, "C'est l'anniversaire d'Annick !", "BTD", "255;235;59", "N'oublie pas de fêter l'anniversaire d'Annick aujourd'hui, voici son numéro si tu veux l'appeler : 07 83 73 84 50", date3, 72));
-         **/
         //endregion
 
         String id = GlobalData.id; // id utilisateur
@@ -314,7 +284,7 @@ public class HelpedActivity extends AppCompatActivity {
         day_events_layout = findViewById(R.id.event_list_layout);
         day_events_scrollview = findViewById(R.id.event_list_scrollview);
 
-
+        this.banners_list.add(new Banner(800, "C'est l'anniversaire d'Annick !", "BTD", "255;235;59", "N'oublie pas de souhaiter à Annick son anniversaire ! ", new Date(), 72));
         displayDayEvents();
         displayDayBanner();
 
