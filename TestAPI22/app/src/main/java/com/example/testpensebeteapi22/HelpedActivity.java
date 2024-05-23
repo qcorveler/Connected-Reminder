@@ -228,6 +228,7 @@ public class HelpedActivity extends AppCompatActivity {
         if (!setting_hourIsVisible) {
             text_view_display_hour.setVisibility(View.GONE);
         }
+
         text_view_display_temporality.setText(display_date.dateContext()); // Affichage de la date et de la temporalité au bon endroit
         text_view_display_day.setText(display_date.getDateFormat1());
 
@@ -1073,6 +1074,25 @@ public class HelpedActivity extends AppCompatActivity {
                 // Je sais pas si ça fonctionne bien, faudra tester
                 setting_hourIsVisible = parameters1.isHourVisible();
                 setting_pastIsAccessible = parameters1.isPastAccessible();
+
+                if (!setting_hourIsVisible) {
+                    text_view_display_hour.setVisibility(View.GONE);
+                }
+                if (setting_hourIsVisible) {
+                    text_view_display_hour.setVisibility(View.VISIBLE);
+                }
+
+                if ((Math.abs(today.dayDifference(display_date)) >= setting_accessibleDaysLimit) || (!setting_pastIsAccessible && onToday())) {
+                    navigation_left_button.setClickable(false);
+                    navigation_left_button.setVisibility(View.GONE);
+                }
+
+                if ((setting_pastIsAccessible && onToday())) {
+                    navigation_left_button.setClickable(true);
+                    navigation_left_button.setVisibility(View.VISIBLE);
+                }
+
+
                 // On a pas encore implémenté les notifications et les sons. Le standby c'est mieux de le laisser à false
             }
 
