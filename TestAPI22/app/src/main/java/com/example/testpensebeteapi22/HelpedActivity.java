@@ -228,6 +228,7 @@ public class HelpedActivity extends AppCompatActivity {
         if (!setting_hourIsVisible) {
             text_view_display_hour.setVisibility(View.GONE);
         }
+
         text_view_display_temporality.setText(display_date.dateContext()); // Affichage de la date et de la temporalité au bon endroit
         text_view_display_day.setText(display_date.getDateFormat1());
 
@@ -473,21 +474,38 @@ public class HelpedActivity extends AppCompatActivity {
         backgroundNewEvents = new Thread(new Runnable() {
             @Override
             public void run() {
-                DatabaseReference database = FirebaseDatabase.getInstance("https://pense-bete-9293d-default-rtdb.europe-west1.firebasedatabase.app").getReference();
-                DatabaseReference helpedRef = database.child("aidés").child(GlobalData.id).child("events");
-                helpedRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
 
+                while(true) {
+                    DatabaseReference database = FirebaseDatabase.getInstance("https://pense-bete-9293d-default-rtdb.europe-west1.firebasedatabase.app").getReference();
+                    DatabaseReference helpedRef = database.child("aidés").child(GlobalData.id).child("events");
+                    helpedRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            for (DataSnapshot childSnapshot : snapshot.getChildren()) {
+                                String idEvent = childSnapshot.getKey();
+                                if (idEvent != null) {
+                                    eventInDatabase(idEvent);
+                                    System.out.println("Event ajouté");
+                                    events_list.toString();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
+                    try{
+                        Thread.sleep(15000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
                     }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
+                }
             }
         }, "backgroundNewEvents");
+        backgroundNewEvents.start();
 
         // Thread gérant le compteur de veille
         backgroundStandby = new Thread(new Runnable() {
@@ -968,7 +986,17 @@ public class HelpedActivity extends AppCompatActivity {
                 Integer icone = snapshot.child("iconId").getValue(Integer.class);
                 Date date = DateAuBonFormat(annee, mois, jour, heure, minute);
                 Event e = new Event(id, title, subtitle, type, couleur, informations, date, 10, icone);
-                events_list.add(e);
+
+                boolean contains = false;
+                for(Event e1 : events_list) {
+                    if (e1.equals(e)) {
+                        contains = true;
+                    }
+                }
+                if(!contains){
+                    events_list.add(e);
+                    displayDayEvents();
+                }
 
                 System.out.println(snapshot.toString());
                 System.out.println("Children" + snapshot.getChildren().toString());
@@ -1016,6 +1044,25 @@ public class HelpedActivity extends AppCompatActivity {
                 // Je sais pas si ça fonctionne bien, faudra tester
                 setting_hourIsVisible = parameters1.isHourVisible();
                 setting_pastIsAccessible = parameters1.isPastAccessible();
+
+                if (!setting_hourIsVisible) {
+                    text_view_display_hour.setVisibility(View.GONE);
+                }
+                if (setting_hourIsVisible) {
+                    text_view_display_hour.setVisibility(View.VISIBLE);
+                }
+
+                if ((Math.abs(today.dayDifference(display_date)) >= setting_accessibleDaysLimit) || (!setting_pastIsAccessible && onToday())) {
+                    navigation_left_button.setClickable(false);
+                    navigation_left_button.setVisibility(View.GONE);
+                }
+
+                if ((setting_pastIsAccessible && onToday())) {
+                    navigation_left_button.setClickable(true);
+                    navigation_left_button.setVisibility(View.VISIBLE);
+                }
+
+
                 // On a pas encore implémenté les notifications et les sons. Le standby c'est mieux de le laisser à false
             }
 
