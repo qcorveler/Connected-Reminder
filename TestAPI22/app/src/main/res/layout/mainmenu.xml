@@ -40,7 +40,7 @@
         android:id="@+id/helped_button"
         android:layout_width="102dp"
         android:layout_height="65dp"
-        android:text="Helped"
+        android:text="Aidé"
 
         app:layout_constraintStart_toStartOf="@id/old_image"
         app:layout_constraintTop_toTopOf="@id/guideline_marge_6"
@@ -51,7 +51,7 @@
         android:id="@+id/helper_button"
         android:layout_width="102dp"
         android:layout_height="65dp"
-        android:text="Helper"
+        android:text="Aidant"
         app:layout_constraintTop_toTopOf="@id/guideline_marge_6"
         app:layout_constraintEnd_toEndOf="@id/young_image"
         app:layout_constraintStart_toStartOf="@id/young_image"/>
