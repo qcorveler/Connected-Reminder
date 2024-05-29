@@ -206,7 +206,8 @@ public class HelpedActivity extends AppCompatActivity {
         //setting_hourIsVisible = true;
 
         double screenInches = DimensionsUtil.getScreenInches(this);
-        setting_Textsize = screenInches > 0 ? (float) screenInches / 7 : 1;
+//        setting_Textsize = screenInches > 0 ? (float) screenInches / 7 : 1;
+        setting_Textsize = 1;
         //endregion
 
         //region ------------ Gestion du compteur d'activité ------------
@@ -359,6 +360,7 @@ public class HelpedActivity extends AppCompatActivity {
                 // TODO afficher un pop_up de retour vers le menu principal
             }
         });
+        this.parameters_button.setVisibility(View.GONE);
         displayButtons();
 
         //gestion de l'appui sur le bouton retour :
@@ -937,7 +939,9 @@ public class HelpedActivity extends AppCompatActivity {
     }
 
     public void setVisible_ParametersButton() {
-        parameters_button.setVisibility(View.VISIBLE);
+        // parameters_button.setVisibility(View.VISIBLE);
+        this.parameters_button.setVisibility(View.GONE); // Juste parce que c'est pas implémenté pour l'instant
+
     }
 
     public Thread getBackgroundPastEvents() {

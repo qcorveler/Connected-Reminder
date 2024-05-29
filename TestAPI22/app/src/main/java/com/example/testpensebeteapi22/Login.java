@@ -67,6 +67,7 @@ public class Login extends AppCompatActivity {
                                 String id = childSnapshot.getKey();
                                 String getPwd = snapshot.child(id).child("password").getValue(String.class);
                                 String getEmail = snapshot.child(id).child("email").getValue(String.class);
+                                System.out.println("récupération des info de connexion");
                                 if (getEmail.equals(emailTxt) && getPwd.equals(passwordTxt)) {
                                     Toast.makeText(Login.this, "Connexion réussie", Toast.LENGTH_SHORT).show();
                                     if(mode.equals("1")){

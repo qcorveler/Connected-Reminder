@@ -31,6 +31,8 @@ import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Locale;
 
 public class HelpedViewFragment extends Fragment {
@@ -187,6 +189,13 @@ public class HelpedViewFragment extends Fragment {
         } else {
             view_root.findViewById(R.id.no_pensebete_layout).setVisibility(View.GONE);
         }
+
+        Collections.sort(day_events, new Comparator<Event>() {
+            @Override
+            public int compare(Event o1, Event o2) {
+                return o1.compareTo(o2);
+            }
+        });
 
         // Affichage des events de la liste de jour
         for (Event e : day_events) {
@@ -378,8 +387,12 @@ public class HelpedViewFragment extends Fragment {
                         String type = snapshot.child("type").getValue(String.class);
                         Integer id = snapshot.child("id_event").getValue(Integer.class);
                         Integer icone = snapshot.child("iconId").getValue(Integer.class);
+                        Boolean confirmed = snapshot.child("confirmed").getValue(Boolean.class);
+                        Boolean forgotten = snapshot.child("forgotten").getValue(Boolean.class);
 
                         Event e = new Event(id, title, subtitle, type, couleur, informations, date, 10, icone);
+                        e.setConfirmed(confirmed);
+                        e.setForgotten(forgotten);
                         if (!day_events.contains(e)){
                             System.out.println(e.getId_event());
                             day_events.add(e);
